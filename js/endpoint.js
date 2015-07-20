@@ -1,30 +1,53 @@
 var audio = document.getElementById('audio');
 
 service('music-service')
-  .method('play', (params) => {
-    audio.play();
-    console.log('[music-service] play()', params);
-  })
+  .method('play', play)
+  .method('pause', pause)
 
-  .method('pause', () => {
-    console.log('[music-service] pause()');
-  })
-
-  .method('getSongs', () => {
-    return new Promise((resolve) => {
-      var songs = [];
-
-      Database.enumerate('metadata.title', null, 'next', (song) => {
-        if (!song) {
-          resolve(songs);
-          return;
-        }
-
-        songs.push(song);
-      });
-    });
-  })
+  .method('getSongs', getSongs)
+  .method('getSongFile', getSongFile)
 
   .listen();
+
+function play(songId) {
+  console.log('[music-service] play()', songId);
+
+  if (!songId) {
+    audio.play();
+    return;
+  }
+
+  getSongFile(songId).then((file) => {
+    audio.src = null;
+    audio.load();
+
+    audio.src = URL.createObjectURL(file);
+    audio.load();
+    audio.play();
+  });
+}
+
+function pause() {
+  console.log('[music-service] pause()');
+}
+
+function getSongs() {
+  return new Promise((resolve) => {
+    var songs = [];
+
+    Database.enumerate('metadata.title', null, 'next', (song) => {
+      if (!song) {
+        resolve(songs);
+        return;
+      }
+
+      songs.push(song);
+    });
+  });
+}
+
+function getSongFile(songId) {
+  return Database.getFile(songId);
+}
 
 Database.init();

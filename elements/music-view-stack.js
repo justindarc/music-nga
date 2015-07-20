@@ -76,91 +76,98 @@ proto.createdCallback = function() {
     classList.remove('transition');
   });
 
-  this.views = [];
-  this.activeView = null;
+  this.states = [];
+  this.activeState = null;
 };
 
-proto.setRootView = function(view) {
-  this.views = [view];
+proto.setRootView = function(view, params) {
+  var state = {
+    view: view,
+    params: params
+  };
+
+  this.states = [state];
 
   this.container.innerHTML = '';
   this.container.appendChild(view);
 
-  if (this.activeView) {
-    this.activeView.classList.remove('active');
+  if (this.activeState && this.activeState.view) {
+    this.activeState.view.classList.remove('active');
   }
 
   view.classList.add('active');
-  this.activeView = view;
+  this.activeState = state;
 
-  this.dispatchEvent(new CustomEvent('change', {
-    detail: { view: view }
-  }));
+  this.dispatchEvent(new CustomEvent('change', { detail: state }));
 };
 
-proto.pushView = function(view) {
+proto.pushView = function(view, params) {
   window.requestAnimationFrame(() => {
-    this.views.push(view);
+    var state = {
+      view: view,
+      params: params
+    };
+
+    this.states.push(state);
 
     this.container.appendChild(view);
 
-    var oldActiveView = this.activeView;
+    var oldActiveView = this.activeState && this.activeState.view;
     if (oldActiveView) {
       oldActiveView.classList.remove('active');
       oldActiveView.classList.add('push');
       oldActiveView.classList.add('out');
     }
 
-    this.activeView = view;
-    this.activeView.classList.add('active');
-    this.activeView.classList.add('push');
-    this.activeView.classList.add('in');
+    this.activeState = state;
+
+    view.classList.add('active');
+    view.classList.add('push');
+    view.classList.add('in');
 
     window.requestAnimationFrame(() => {
       if (oldActiveView) {
         oldActiveView.classList.add('transition');
       }
 
-      this.activeView.classList.add('transition');
+      view.classList.add('transition');
     });
 
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: { view: this.activeView }
-    }));
+    this.dispatchEvent(new CustomEvent('change', { detail: state }));
   });
 };
 
 proto.popView = function() {
-  if (this.views.length < 2) {
+  if (this.states.length < 2) {
     return;
   }
 
   window.requestAnimationFrame(() => {
-    this.views.pop();
+    this.states.pop();
 
-    var oldActiveView = this.activeView;
+    var oldActiveView = this.activeState && this.activeState.view;
     oldActiveView.classList.remove('active');
     oldActiveView.classList.add('pop');
     oldActiveView.classList.add('out');
 
-    this.activeView = this.views[this.views.length - 1];
-    if (this.activeView) {
-      this.activeView.classList.add('active');
-      this.activeView.classList.add('pop');
-      this.activeView.classList.add('in');
+    this.activeState = this.states[this.states.length - 1];
+
+    var activeView = this.activeState && this.activeState.view;
+    if (activeView) {
+      activeView.classList.add('active');
+      activeView.classList.add('pop');
+      activeView.classList.add('in');
     }
 
     window.requestAnimationFrame(() => {
       oldActiveView.classList.add('transition');
 
-      if (this.activeView) {
-        this.activeView.classList.add('transition');
+      if (activeView) {
+        activeView.classList.add('transition');
       }
     });
 
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: { view: this.activeView }
-    }));
+    this.dispatchEvent(new CustomEvent('change', { detail: this.activeState }));
   });
 };
 

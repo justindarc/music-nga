@@ -15,7 +15,9 @@ navigator.serviceWorker.getRegistration().then((registration) => {
     });
 });
 
-// var api = client('music-service', document.getElementById('endpoint'));
+var endpoint = document.getElementById('endpoint');
+
+service('*').on('message', message => message.forward(endpoint)).listen();
 
 var views = {};
 
@@ -24,7 +26,7 @@ var viewStack = document.getElementById('view-stack');
 var tabBar = document.getElementById('tab-bar');
 
 header.addEventListener('action', (evt) => {
-  if (evt.detail.type === 'back' && viewStack.views.length > 1) {
+  if (evt.detail.type === 'back' && viewStack.states.length > 1) {
     viewStack.popView();
     window.history.back();
   }
@@ -37,7 +39,7 @@ viewStack.addEventListener('change', (evt) => {
 
   document.body.dataset.activeViewId = viewId;
 
-  backButton.style.visibility = viewStack.views.length < 2 ? 'hidden' : 'visible';
+  backButton.style.visibility = viewStack.states.length < 2 ? 'hidden' : 'visible';
 });
 
 tabBar.addEventListener('change', (evt) => {
@@ -62,21 +64,37 @@ function getViewById(viewId) {
 }
 
 function navigateToURL(url, replaceRoot) {
-  var parts = url.split('/');
-  parts.shift();
+  var path = url.substring(1);
+  var parts = path.split('?');
 
-  var viewId = parts[0].split('?')[0];
+  var viewId = parts.shift();
+  var params = parseQueryString(parts.join('?'));
   var view = getViewById(viewId);
 
   if (replaceRoot) {
-    viewStack.setRootView(view);
+    viewStack.setRootView(view, params);
   }
 
   else {
-    viewStack.pushView(view);
+    viewStack.pushView(view, params);
   }
 
   window.history.pushState(null, null, url);
+}
+
+function parseQueryString(queryString) {
+  var query = {};
+
+  var params = queryString.split('&');
+  params.forEach((param) => {
+    var parts = param.split('=');
+    var key = parts.shift();
+    var value = parts.join('=');
+
+    query[key] = value || true;
+  });
+
+  return query;
 }
 
 function boot() {

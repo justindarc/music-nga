@@ -1,6 +1,13 @@
 function SongsView() {
   this.content = document.getElementById('content');
 
+  this.content.addEventListener('click', (evt) => {
+    var link = evt.target.closest('a[data-song-id]');
+    if (link) {
+      api.method('play', link.dataset.songId);
+    }
+  });
+
   this.getSongs().then(() => this.render());
 }
 
@@ -15,7 +22,7 @@ SongsView.prototype.render = function() {
 
   this.songs.forEach((song) => {
     var template =
-`<a href="/player?id=${song.name}">
+`<a href="/player?id=${song.name}" data-song-id="${song.name}">
   ${song.metadata.title}
 </a>`;
 
@@ -25,6 +32,5 @@ SongsView.prototype.render = function() {
   this.content.innerHTML = html;
 };
 
-// window.api = client('music-service', window.parent.document.getElementById('endpoint'));
-window.api = client('music-service', document.getElementById('endpoint'));
+window.api = client('music-service', window.parent);
 window.view = new SongsView();

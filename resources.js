@@ -40,6 +40,7 @@ const RESOURCES = [
   '/js/shared/lazy-loader.js',
   '/js/shared/mediadb.js',
   '/js/shims/device-storage.js',
+  '/js/views/player.js',
   '/js/views/playlist-detail.js',
   '/js/views/playlists.js',
   '/js/views/songs.js',
