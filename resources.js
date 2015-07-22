@@ -17,6 +17,7 @@ const RESOURCES = [
   '/components/threads/threads.js',
   '/css/app.css',
   '/css/view.css',
+  '/elements/music-list-item.js',
   '/elements/music-tab-bar.js',
   '/elements/music-view-stack.js',
   '/img/icons/music_126.png',

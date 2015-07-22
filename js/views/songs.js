@@ -22,8 +22,11 @@ SongsView.prototype.render = function() {
 
   this.songs.forEach((song) => {
     var template =
-`<a href="/player?id=${song.name}" data-song-id="${song.name}">
-  ${song.metadata.title}
+`<a is="music-list-item"
+    href="/player?id=${song.name}"
+    title="${song.metadata.title}"
+    subtitle="${song.metadata.artist}"
+    data-song-id="${song.name}">
 </a>`;
 
     html += template;

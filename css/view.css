@@ -14,7 +14,46 @@ body {
 }
 
 a {
+  text-decoration: none;
   display: block;
   font-size: 2rem;
   padding: 1rem;
+}
+
+a[is="music-list-item"]:first-child:before,
+a[is="music-list-item"]:not([starts-with="A"]) + a[is="music-list-item"][starts-with="A"]:before,
+a[is="music-list-item"]:not([starts-with="B"]) + a[is="music-list-item"][starts-with="B"]:before,
+a[is="music-list-item"]:not([starts-with="C"]) + a[is="music-list-item"][starts-with="C"]:before,
+a[is="music-list-item"]:not([starts-with="D"]) + a[is="music-list-item"][starts-with="D"]:before,
+a[is="music-list-item"]:not([starts-with="E"]) + a[is="music-list-item"][starts-with="E"]:before,
+a[is="music-list-item"]:not([starts-with="F"]) + a[is="music-list-item"][starts-with="F"]:before,
+a[is="music-list-item"]:not([starts-with="G"]) + a[is="music-list-item"][starts-with="G"]:before,
+a[is="music-list-item"]:not([starts-with="H"]) + a[is="music-list-item"][starts-with="H"]:before,
+a[is="music-list-item"]:not([starts-with="I"]) + a[is="music-list-item"][starts-with="I"]:before,
+a[is="music-list-item"]:not([starts-with="J"]) + a[is="music-list-item"][starts-with="J"]:before,
+a[is="music-list-item"]:not([starts-with="K"]) + a[is="music-list-item"][starts-with="K"]:before,
+a[is="music-list-item"]:not([starts-with="L"]) + a[is="music-list-item"][starts-with="L"]:before,
+a[is="music-list-item"]:not([starts-with="M"]) + a[is="music-list-item"][starts-with="M"]:before,
+a[is="music-list-item"]:not([starts-with="N"]) + a[is="music-list-item"][starts-with="N"]:before,
+a[is="music-list-item"]:not([starts-with="O"]) + a[is="music-list-item"][starts-with="O"]:before,
+a[is="music-list-item"]:not([starts-with="P"]) + a[is="music-list-item"][starts-with="P"]:before,
+a[is="music-list-item"]:not([starts-with="Q"]) + a[is="music-list-item"][starts-with="Q"]:before,
+a[is="music-list-item"]:not([starts-with="R"]) + a[is="music-list-item"][starts-with="R"]:before,
+a[is="music-list-item"]:not([starts-with="S"]) + a[is="music-list-item"][starts-with="S"]:before,
+a[is="music-list-item"]:not([starts-with="T"]) + a[is="music-list-item"][starts-with="T"]:before,
+a[is="music-list-item"]:not([starts-with="U"]) + a[is="music-list-item"][starts-with="U"]:before,
+a[is="music-list-item"]:not([starts-with="V"]) + a[is="music-list-item"][starts-with="V"]:before,
+a[is="music-list-item"]:not([starts-with="W"]) + a[is="music-list-item"][starts-with="W"]:before,
+a[is="music-list-item"]:not([starts-with="X"]) + a[is="music-list-item"][starts-with="X"]:before,
+a[is="music-list-item"]:not([starts-with="Y"]) + a[is="music-list-item"][starts-with="Y"]:before,
+a[is="music-list-item"]:not([starts-with="Z"]) + a[is="music-list-item"][starts-with="Z"]:before {
+  content: attr(starts-with);
+  border-bottom: 0.1rem solid rgba(255, 255, 255, 0.1);
+  color: #008aaa;
+  font-size: 1.9rem;
+  line-height: 2.5rem;
+  display: block;
+  position: relative;
+  margin: 0 2.5rem 0 3rem;
+  height: 2.5rem;
 }

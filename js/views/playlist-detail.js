@@ -25,8 +25,9 @@ PlaylistDetailView.prototype.render = function() {
 
   this.playlist.songs.forEach((song) => {
     var template =
-`<a href="/player?id=${song.id}">
-  ${song.title}
+`<a is="music-list-item"
+    href="/player?id=${song.name}"
+    title="${song.title}">
 </a>`;
 
     html += template;
