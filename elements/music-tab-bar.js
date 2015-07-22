@@ -34,7 +34,7 @@ proto.createdCallback = function() {
       return;
     }
 
-    this.selectedIndex = [].indexOf.call(this.querySelectorAll('button'), tab);
+    this.selectedElement = tab;
   });
 
   this.selectedIndex = 0;
@@ -43,6 +43,13 @@ proto.createdCallback = function() {
 Object.defineProperty(proto, 'selectedElement', {
   get: function() {
     return this.querySelectorAll('button')[this.selectedIndex];
+  },
+
+  set: function(value) {
+    var index = [].indexOf.call(this.querySelectorAll('button'), value);
+    if (index !== -1) {
+      this.selectedIndex = index;
+    }
   }
 });
 

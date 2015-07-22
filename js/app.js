@@ -71,6 +71,11 @@ function navigateToURL(url, replaceRoot) {
   var params = parseQueryString(parts.join('?'));
   var view = getViewById(viewId);
 
+  var tab = tabBar.querySelector('button[data-view-id="' + viewId + '"]');
+  if (tab) {
+    tabBar.selectedElement = tab;
+  }
+
   if (replaceRoot) {
     viewStack.setRootView(view, params);
   }
