@@ -1,5 +1,10 @@
 (function() {
 
+if (navigator.getDeviceStorages &&
+    navigator.getDeviceStorage) {
+  return;
+}
+
 const PRELOAD_FILES = [
   '/media/1-01%20Whole%20Lotta%20Love.mp3',
   '/media/1-02%20What%20Is%20and%20What%20Should%20Never%20Be.mp3',

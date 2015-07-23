@@ -20,6 +20,9 @@ var template =
     padding: 0 0.5rem 0 0;
     left: 3rem;
     width: calc(100% - 12rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   h1 {
     color: #fff;

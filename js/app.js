@@ -104,7 +104,7 @@ function parseQueryString(queryString) {
 
 function boot() {
   var url = window.location.href.substring(window.location.origin.length);
-  if (url === '/') {
+  if (url === '/' || url === '/index.html') {
     url = '/' + tabBar.firstElementChild.dataset.viewId;
   }
 
