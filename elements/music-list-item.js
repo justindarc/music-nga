@@ -16,6 +16,7 @@ var template =
   h1, h2 {
     font-weight: normal;
     position: absolute;
+    margin: 0.2rem 0 0;
     padding: 0 0.5rem 0 0;
     left: 3rem;
     width: calc(100% - 12rem);

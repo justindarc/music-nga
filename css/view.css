@@ -13,11 +13,8 @@ body {
   margin: 0;
 }
 
-a {
+a[is="music-list-item"] {
   text-decoration: none;
-  display: block;
-  font-size: 2rem;
-  padding: 1rem;
 }
 
 a[is="music-list-item"]:first-child:before,
@@ -51,7 +48,7 @@ a[is="music-list-item"]:not([starts-with="Z"]) + a[is="music-list-item"][starts-
   border-bottom: 0.1rem solid rgba(255, 255, 255, 0.1);
   color: #008aaa;
   font-size: 1.9rem;
-  line-height: 2.5rem;
+  line-height: 2.8rem;
   display: block;
   position: relative;
   margin: 0 2.5rem 0 3rem;

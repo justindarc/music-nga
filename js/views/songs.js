@@ -1,10 +1,12 @@
+var client = threads.client('music-service', window.parent);
+
 function SongsView() {
   this.content = document.getElementById('content');
 
   this.content.addEventListener('click', (evt) => {
     var link = evt.target.closest('a[data-song-id]');
     if (link) {
-      api.method('play', link.dataset.songId);
+      client.method('play', link.dataset.songId);
     }
   });
 
@@ -12,7 +14,7 @@ function SongsView() {
 }
 
 SongsView.prototype.getSongs = function() {
-  return api.method('getSongs').then((songs) => {
+  return client.method('getSongs').then((songs) => {
     return this.songs = songs;
   });
 };
@@ -35,5 +37,4 @@ SongsView.prototype.render = function() {
   this.content.innerHTML = html;
 };
 
-window.api = client('music-service', window.parent);
 window.view = new SongsView();

@@ -8,12 +8,23 @@
   <link rel="stylesheet" href="/components/gaia-icons/gaia-icons-embedded.css">
   <link rel="stylesheet" href="/components/gaia-theme/gaia-theme.css">
   <link rel="stylesheet" href="/css/view.css">
+  <script src="/elements/music-list-item.js"></script>
 </head>
 <body class="theme-media" role="application">
-  <h1>Artist Detail</h1>
-  <a href="/player?id=1">Player (1)</a>
-  <a href="/player?id=2">Player (2)</a>
-  <a href="/player?id=3">Player (3)</a>
+  <section id="content">
+    <a is="music-list-item"
+       href="/player?id=1"
+       title="Player (1)">
+    </a>
+    <a is="music-list-item"
+       href="/player?id=2"
+       title="Player (2)">
+    </a>
+    <a is="music-list-item"
+       href="/player?id=3"
+       title="Player (3)">
+    </a>
+  </section>
 
   <script src="/js/view.js"></script>
 </body>

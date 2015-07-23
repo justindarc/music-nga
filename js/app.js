@@ -15,9 +15,9 @@ navigator.serviceWorker.getRegistration().then((registration) => {
     });
 });
 
-var endpoint = document.getElementById('endpoint');
-
-service('*').on('message', message => message.forward(endpoint)).listen();
+var service = threads.service('*')
+  .on('message', message => message.forward(document.getElementById('endpoint')))
+  .listen();
 
 var views = {};
 

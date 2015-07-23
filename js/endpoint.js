@@ -1,6 +1,6 @@
 var audio = document.getElementById('audio');
 
-service('music-service')
+var service = threads.service('music-service')
   .method('play', play)
   .method('pause', pause)
 
