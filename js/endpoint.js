@@ -4,6 +4,8 @@ var service = threads.service('music-service')
   .method('play', play)
   .method('pause', pause)
 
+  .method('getCurrentSongDuration', getCurrentSongDuration)
+
   .method('getSongs', getSongs)
   .method('getSongFile', getSongFile)
 
@@ -29,6 +31,12 @@ function play(songId) {
 
 function pause() {
   console.log('[music-service] pause()');
+}
+
+function getCurrentSongDuration() {
+  return new Promise((resolve) => {
+    resolve(audio.duration);
+  });
 }
 
 function getSongs() {
