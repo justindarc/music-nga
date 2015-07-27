@@ -21,11 +21,15 @@ function play(songId) {
 
   getSongFile(songId).then((file) => {
     audio.src = null;
+    audio.onloadeddata = null;
     audio.load();
 
     audio.src = URL.createObjectURL(file);
+    audio.onloadeddata = () => {
+      service.broadcast('loadedSong');
+      audio.play();
+    };
     audio.load();
-    audio.play();
   });
 }
 
