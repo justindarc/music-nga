@@ -13,6 +13,7 @@ var template =
     position: relative;
     width: 100%;
     height: 4.8rem;
+    -moz-user-select: none;
   }
   #container > button {
     background: transparent;

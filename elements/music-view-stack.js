@@ -10,6 +10,7 @@ var template =
     width: 100%;
     height: 100%;
     overflow: hidden;
+    -moz-user-select: none;
   }
   #container > iframe {
     border: none;

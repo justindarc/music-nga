@@ -3,6 +3,8 @@
 
 var proto = Object.create(HTMLElement.prototype);
 
+var isTouch = 'ontouchstart' in window;
+
 var template =
 `<style scoped>
   #container {
@@ -12,6 +14,7 @@ var template =
     position: relative;
     width: 100%;
     height: 4.2rem;
+    -moz-user-select: none;
   }
   #container > span {
     display: inline-block;
@@ -108,36 +111,43 @@ proto.createdCallback = function() {
     remainingTime:    $id('remaining-time')
   };
 
+  var container = this.els.container;
   var seekBar = this.els.seekBar;
 
-  seekBar.addEventListener('touchstart', (evt) => {
-    seekBar.addEventListener('touchmove', touchmoveHandler);
-    seekBar.addEventListener('touchend', touchendHandler);
+  container.addEventListener(isTouch ? 'touchstart' : 'mousedown', (evt) => {
+    container.addEventListener(isTouch ? 'touchmove' : 'mousemove', pointerMoveHandler);
+    container.addEventListener(isTouch ? 'touchend' : 'mouseup', pointerEndHandler);
 
     this.els.seekBarIndicator.classList.add('highlight');
 
-    touchmoveHandler(evt);
+    pointerMoveHandler(evt);
   });
 
-  var touchmoveHandler = (evt) => {
-    var touch = evt.touches[0];
-    var percent = clamp(0, 1, (touch.clientX - seekBar.offsetLeft) / seekBar.offsetWidth);
+  var pointerMoveHandler = (evt) => {
+    var pointer = isTouch ? evt.touches[0] : evt;
+    var percent = clamp(0, 1, (pointer.clientX - seekBar.offsetLeft) / seekBar.offsetWidth);
 
     if (document.documentElement.dir === 'rtl') {
-      this.remainingTime = percent * this.duration;
+      this.remainingTime = this._overrideRemainingTime = percent * this.duration;
     }
 
     else {
-      this.elapsedTime = percent * this.duration;
+      this.elapsedTime = this._overrideElapsedTime = percent * this.duration;
     }
   };
 
-  var touchendHandler = (evt) => {
-    seekBar.removeEventListener('touchmove', touchmoveHandler);
-    seekBar.removeEventListener('touchend', touchendHandler);
+  var pointerEndHandler = (evt) => {
+    container.removeEventListener(isTouch ? 'touchmove' : 'mousemove', pointerMoveHandler);
+    container.removeEventListener(isTouch ? 'touchend' : 'mouseup', pointerEndHandler);
+
+    this._overrideRemainingTime = null;
+    this._overrideElapsedTime = null;
 
     this.els.seekBarIndicator.classList.remove('highlight');
   };
+
+  this._overrideRemainingTime = null;
+  this._overrideElapsedTime = null;
 
   this.duration = null;
   this.elapsedTime = null;
@@ -173,7 +183,7 @@ Object.defineProperty(proto, 'elapsedTime', {
       return;
     }
 
-    this._elapsedTime = value;
+    this._elapsedTime = this._overrideElapsedTime !== null ? this._overrideElapsedTime : value;
     this.remainingTime = this._duration - this._elapsedTime;
   }
 });
@@ -191,7 +201,7 @@ Object.defineProperty(proto, 'remainingTime', {
     }
 
     else {
-      this._remainingTime = value;
+      this._remainingTime = this._overrideRemainingTime !== null ? this._overrideRemainingTime : value;
       this._elapsedTime = this._duration - this._remainingTime;
     }
 

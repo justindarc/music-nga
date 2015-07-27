@@ -12,6 +12,7 @@ var template =
     width: 100%;
     height: 6rem;
     text-decoration: none;
+    -moz-user-select: none;
   }
   h1, h2 {
     font-weight: normal;
