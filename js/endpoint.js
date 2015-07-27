@@ -9,6 +9,12 @@ var service = threads.service('music-service')
   .method('getSongs', getSongs)
   .method('getSongFile', getSongFile)
 
+  .method('testMethod', function() {
+    return new Promise((resolve) => {
+      resolve('This result was sent from the service endpoint');
+    });
+  })
+
   .listen();
 
 function play(songId) {

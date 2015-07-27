@@ -3,6 +3,10 @@ var client = threads.client('music-service', window.parent);
 function PlayerView() {
   this.seekBar = document.getElementById('seek-bar');
 
+  client.method('testMethod').then((result) => {
+    console.log('Received "testMethod" result!', result);
+  });
+
   client.on('loadedSong', () => {
     console.log('Received "loadedSong" event!');
 
