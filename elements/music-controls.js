@@ -76,6 +76,7 @@ proto.createdCallback = function() {
         break;
       case 'toggle':
         this.playing = !this.playing;
+        this.dispatchEvent(new CustomEvent(this.playing ? 'play' : 'pause'));
         break;
     }
   });
@@ -93,8 +94,6 @@ Object.defineProperty(proto, 'playing', {
     }
 
     this.els.toggle.dataset.icon = playing ? 'pause' : 'play';
-
-    this.dispatchEvent(new CustomEvent(playing ? 'play' : 'pause'));
   }
 });
 

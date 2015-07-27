@@ -4,6 +4,7 @@ var service = threads.service('music-service')
   .method('play', play)
   .method('pause', pause)
 
+  .method('getPaused', getPaused)
   .method('getDuration', getDuration)
   .method('getElapsedTime', getElapsedTime)
 
@@ -16,6 +17,14 @@ audio.onloadeddata = function() {
   URL.revokeObjectURL(audio.src);
 };
 
+audio.onplay = function() {
+  service.broadcast('play');
+};
+
+audio.onpause = function() {
+  service.broadcast('pause');
+};
+
 audio.ondurationchange = function() {
   service.broadcast('durationChange', audio.duration);
 };
@@ -25,8 +34,6 @@ audio.ontimeupdate = function() {
 };
 
 function play(songId) {
-  console.log('[music-service] play()', songId);
-
   if (!songId) {
     audio.play();
     return;
@@ -43,7 +50,13 @@ function play(songId) {
 }
 
 function pause() {
-  console.log('[music-service] pause()');
+  audio.pause();
+}
+
+function getPaused() {
+  return new Promise((resolve) => {
+    resolve(audio.paused);
+  });
 }
 
 function getDuration() {
