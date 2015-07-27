@@ -4,18 +4,25 @@ var service = threads.service('music-service')
   .method('play', play)
   .method('pause', pause)
 
-  .method('getCurrentSongDuration', getCurrentSongDuration)
+  .method('getDuration', getDuration)
+  .method('getElapsedTime', getElapsedTime)
 
   .method('getSongs', getSongs)
   .method('getSongFile', getSongFile)
 
-  .method('testMethod', function() {
-    return new Promise((resolve) => {
-      resolve('This result was sent from the service endpoint');
-    });
-  })
-
   .listen();
+
+audio.onloadeddata = function() {
+  URL.revokeObjectURL(audio.src);
+};
+
+audio.ondurationchange = function() {
+  service.broadcast('durationChange', audio.duration);
+};
+
+audio.ontimeupdate = function() {
+  service.broadcast('elapsedTimeChange', audio.currentTime);
+};
 
 function play(songId) {
   console.log('[music-service] play()', songId);
@@ -27,15 +34,11 @@ function play(songId) {
 
   getSongFile(songId).then((file) => {
     audio.src = null;
-    audio.onloadeddata = null;
     audio.load();
 
     audio.src = URL.createObjectURL(file);
-    audio.onloadeddata = () => {
-      service.broadcast('loadedSong');
-      audio.play();
-    };
     audio.load();
+    audio.play();
   });
 }
 
@@ -43,9 +46,15 @@ function pause() {
   console.log('[music-service] pause()');
 }
 
-function getCurrentSongDuration() {
+function getDuration() {
   return new Promise((resolve) => {
     resolve(audio.duration);
+  });
+}
+
+function getElapsedTime() {
+  return new Promise((resolve) => {
+    resolve(audio.currentTime);
   });
 }
 

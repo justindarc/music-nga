@@ -7,6 +7,8 @@ var template =
 `<style scoped>
   #container {
     background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-flow: row nowrap;
     position: relative;
     width: 100%;
     height: 4.2rem;
@@ -23,6 +25,7 @@ var template =
     font-weight: 400;
     line-height: 4.2rem;
     vertical-align: top;
+    flex: 0 0 auto;
     width: 5.3rem;
   }
   #elapsed-time {
@@ -33,7 +36,7 @@ var template =
     text-align: right;
   }
   #seek-bar {
-    width: calc(100% - 14.1rem);
+    flex: 1 0 auto;
     z-index: 1;
   }
   #seek-bar-progress {
