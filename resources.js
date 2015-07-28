@@ -42,6 +42,8 @@ const RESOURCES = [
   '/js/services/audio.js',
   '/js/services/playlist.js',
   '/js/services/songs.js',
+  '/js/shared/async-storage.js',
+  '/js/shared/image-utils.js',
   '/js/shared/lazy-loader.js',
   '/js/shared/mediadb.js',
   '/js/shims/device-storage.js',

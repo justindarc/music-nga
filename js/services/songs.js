@@ -44,4 +44,19 @@ function SongsService(worker) {
         });
     });
   }));
+
+  worker.get('/api/songs/thumbnail/:filePath', stopAfter((request) => {
+    return new Promise((resolve) => {
+      var filePath = '/' + request.parameters.filePath.replace(/\%20/g, ' ');
+      client.method('getSongThumbnail', filePath)
+        .then((file) => {
+          resolve(new Response(file, {
+            headers: { 'Content-Type': file.type || 'application/octet-stream' }
+          }));
+        })
+        .catch((error) => {
+          resolve(new Response(null, { status: 404 }));
+        });
+    });
+  }));
 }

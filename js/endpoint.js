@@ -10,6 +10,7 @@ var service = threads.service('music-service')
   .method('getSong', getSong)
   .method('getSongFile', getSongFile)
   .method('getSongArtwork', getSongArtwork)
+  .method('getSongThumbnail', getSongThumbnail)
 
   .listen(new BroadcastChannel('music-service'));
 
@@ -90,6 +91,14 @@ function getSongArtwork(filePath) {
   return LazyLoader.load('/js/metadata/album_art_cache.js').then(() => {
     return getSong(filePath).then((song) => {
       return AlbumArtCache.getFullSizeBlob(song);
+    });
+  });
+}
+
+function getSongThumbnail(filePath) {
+  return LazyLoader.load('/js/metadata/album_art_cache.js').then(() => {
+    return getSong(filePath).then((song) => {
+      return AlbumArtCache.getThumbnailBlob(song);
     });
   });
 }
