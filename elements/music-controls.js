@@ -75,25 +75,25 @@ proto.createdCallback = function() {
         this.dispatchEvent(new CustomEvent(button.id));
         break;
       case 'toggle':
-        this.playing = !this.playing;
-        this.dispatchEvent(new CustomEvent(this.playing ? 'play' : 'pause'));
+        this.paused = !this.paused;
+        this.dispatchEvent(new CustomEvent(this.paused ? 'pause' : 'play'));
         break;
     }
   });
 };
 
-Object.defineProperty(proto, 'playing', {
+Object.defineProperty(proto, 'paused', {
   get: function() {
-    return this.els.toggle.dataset.icon === 'pause';
+    return this.els.toggle.dataset.icon !== 'pause';
   },
 
   set: function(value) {
-    var playing = !!value;
-    if (playing === this.playing) {
+    var paused = !!value;
+    if (paused === this.paused) {
       return;
     }
 
-    this.els.toggle.dataset.icon = playing ? 'pause' : 'play';
+    this.els.toggle.dataset.icon = paused ? 'play' : 'pause';
   }
 });
 

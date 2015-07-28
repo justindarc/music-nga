@@ -14,7 +14,23 @@ const PRELOAD_FILES = [
   '/media/1-06%20Living%20Loving%20Maid%20(She\'s%20Just%20a%20Woman).mp3',
   '/media/1-07%20Ramble%20On.mp3',
   '/media/1-08%20Moby%20Dick.mp3',
-  '/media/1-09%20Bring%20It%20On%20Home.mp3'
+  '/media/1-09%20Bring%20It%20On%20Home.mp3',
+  '/media/soundgarden/1-01%20Let%20Me%20Drown.mp3',
+  '/media/soundgarden/1-02%20My%20Wave.mp3',
+  '/media/soundgarden/1-03%20Fell%20On%20Black%20Days.mp3',
+  '/media/soundgarden/1-04%20Mailman.mp3',
+  '/media/soundgarden/1-05%20Superunknown.mp3',
+  '/media/soundgarden/1-06%20Head%20Down.mp3',
+  '/media/soundgarden/1-07%20Black%20Hole%20Sun.mp3',
+  '/media/soundgarden/1-08%20Spoonman.mp3',
+  '/media/soundgarden/1-09%20Limo%20Wreck.mp3',
+  '/media/soundgarden/1-10%20The%20Day%20I%20Tried%20to%20Live.mp3',
+  '/media/soundgarden/1-11%20Kickstand.mp3',
+  '/media/soundgarden/1-12%20Fresh%20Tendrils.mp3',
+  '/media/soundgarden/1-13%204th%20of%20July.mp3',
+  '/media/soundgarden/1-14%20Half.mp3',
+  '/media/soundgarden/1-15%20Like%20Suicide.mp3',
+  '/media/soundgarden/1-16%20She%20Likes%20Surprises.mp3'
 ];
 
 navigator.getDeviceStorages = navigator.getDeviceStorages || getDeviceStorages;

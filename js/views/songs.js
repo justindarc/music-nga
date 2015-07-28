@@ -1,22 +1,25 @@
-var client = threads.client('music-service', window.parent);
-
 function SongsView() {
   this.content = document.getElementById('content');
 
   this.content.addEventListener('click', (evt) => {
-    var link = evt.target.closest('a[data-song-id]');
+    var link = evt.target.closest('a[data-file-path]');
     if (link) {
-      client.method('play', link.dataset.songId);
+      this.play(link.dataset.filePath);
     }
   });
 
-  this.getSongs().then(() => this.render());
+  this.getSongs().then((songs) => {
+    this.songs = songs;
+    this.render();
+  });
 }
 
 SongsView.prototype.getSongs = function() {
-  return client.method('getSongs').then((songs) => {
-    return this.songs = songs;
-  });
+  return fetch('/api/songs').then(response => response.json());
+};
+
+SongsView.prototype.play = function(filePath) {
+  fetch('/api/audio/play' + filePath);
 };
 
 SongsView.prototype.render = function() {
@@ -28,7 +31,7 @@ SongsView.prototype.render = function() {
     href="/player?id=${song.name}"
     title="${song.metadata.title}"
     subtitle="${song.metadata.artist}"
-    data-song-id="${song.name}">
+    data-file-path="${song.name}">
 </a>`;
 
     html += template;

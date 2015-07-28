@@ -1,11 +1,15 @@
 importScripts('components/serviceworkerware/dist/sww.js');
 importScripts('components/sww-raw-cache/dist/sww-raw-cache.js');
+importScripts('js/services/audio.js');
 importScripts('js/services/playlist.js');
+importScripts('js/services/songs.js');
 importScripts('resources.js');
 
 var worker = new ServiceWorkerWare();
 
+var audioService = new AudioService(worker);
 var playlistService = new PlaylistService(worker);
+var songsService = new SongsService(worker);
 
 worker.use({
   onInstall: function() {

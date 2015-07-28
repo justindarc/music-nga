@@ -9,15 +9,14 @@ function PlaylistDetailView() {
     this.params[parts[0]] = parts[1];
   });
 
-  this.getPlaylist().then(() => this.render());
+  this.getPlaylist().then((playlist) => {
+    this.playlist = playlist;
+    this.render();
+  });
 }
 
 PlaylistDetailView.prototype.getPlaylist = function() {
-  return fetch('/api/playlists/' + this.params.id).then((response) => {
-    return response.json().then((playlist) => {
-      return this.playlist = playlist;
-    });
-  });
+  return fetch('/api/playlists/' + this.params.id).then(response => response.json());
 };
 
 PlaylistDetailView.prototype.render = function() {

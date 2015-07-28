@@ -4,14 +4,12 @@ var service = threads.service('music-service')
   .method('play', play)
   .method('pause', pause)
 
-  .method('getPaused', getPaused)
-  .method('getDuration', getDuration)
-  .method('getElapsedTime', getElapsedTime)
+  .method('getPlaybackStatus', getPlaybackStatus)
 
   .method('getSongs', getSongs)
   .method('getSongFile', getSongFile)
 
-  .listen();
+  .listen(new BroadcastChannel('music-service'));
 
 audio.onloadeddata = function() {
   URL.revokeObjectURL(audio.src);
@@ -33,13 +31,13 @@ audio.ontimeupdate = function() {
   service.broadcast('elapsedTimeChange', audio.currentTime);
 };
 
-function play(songId) {
-  if (!songId) {
+function play(filePath) {
+  if (!filePath) {
     audio.play();
     return;
   }
 
-  getSongFile(songId).then((file) => {
+  getSongFile(filePath).then((file) => {
     audio.src = null;
     audio.load();
 
@@ -53,21 +51,13 @@ function pause() {
   audio.pause();
 }
 
-function getPaused() {
+function getPlaybackStatus() {
   return new Promise((resolve) => {
-    resolve(audio.paused);
-  });
-}
-
-function getDuration() {
-  return new Promise((resolve) => {
-    resolve(audio.duration);
-  });
-}
-
-function getElapsedTime() {
-  return new Promise((resolve) => {
-    resolve(audio.currentTime);
+    resolve({
+      paused: audio.paused,
+      duration: audio.duration,
+      elapsedTime: audio.currentTime
+    });
   });
 }
 
@@ -86,8 +76,12 @@ function getSongs() {
   });
 }
 
-function getSongFile(songId) {
-  return Database.getFile(songId);
+function getSongFile(filePath) {
+  return Database.getFile(filePath);
+}
+
+function getSongArtwork(filePath) {
+
 }
 
 Database.init();
