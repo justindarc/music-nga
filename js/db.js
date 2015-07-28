@@ -250,6 +250,13 @@ var Database = (function() {
     });
   }
 
+  // XXX: ADDED
+  function getFileInfo(filename) {
+    return new Promise(function(resolve, reject) {
+      musicdb.getFileInfo(filename, resolve, reject);
+    });
+  }
+
   function getAll(callback) {
     return musicdb.getAll(callback);
   }
@@ -279,6 +286,7 @@ var Database = (function() {
     incrementPlayCount: incrementPlayCount,
     setSongRating: setSongRating,
     getFile: getFile,
+    getFileInfo: getFileInfo, // XXX: ADDED
     getAll: getAll,
     enumerate: enumerate,
     enumerateAll: enumerateAll,

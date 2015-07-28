@@ -15,13 +15,28 @@ function SongsService(worker) {
     });
   }));
 
+  worker.get('/api/songs/info/:filePath', stopAfter((request) => {
+    return new Promise((resolve) => {
+      var filePath = '/' + request.parameters.filePath.replace(/\%20/g, ' ');
+      client.method('getSong', filePath)
+        .then((song) => {
+          resolve(new Response(JSON.stringify(song), {
+            headers: { 'Content-Type': 'application/json' }
+          }));
+        })
+        .catch((error) => {
+          resolve(new Response(null, { status: 404 }));
+        });
+    });
+  }));
+
   worker.get('/api/songs/artwork/:filePath', stopAfter((request) => {
     return new Promise((resolve) => {
       var filePath = '/' + request.parameters.filePath.replace(/\%20/g, ' ');
       client.method('getSongArtwork', filePath)
         .then((file) => {
           resolve(new Response(file, {
-            headers: { 'Content-Type': 'application/octet-stream' }
+            headers: { 'Content-Type': file.type || 'application/octet-stream' }
           }));
         })
         .catch((error) => {

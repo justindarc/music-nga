@@ -7,7 +7,9 @@ var service = threads.service('music-service')
   .method('getPlaybackStatus', getPlaybackStatus)
 
   .method('getSongs', getSongs)
+  .method('getSong', getSong)
   .method('getSongFile', getSongFile)
+  .method('getSongArtwork', getSongArtwork)
 
   .listen(new BroadcastChannel('music-service'));
 
@@ -76,12 +78,20 @@ function getSongs() {
   });
 }
 
+function getSong(filePath) {
+  return Database.getFileInfo(filePath);
+}
+
 function getSongFile(filePath) {
   return Database.getFile(filePath);
 }
 
 function getSongArtwork(filePath) {
-
+  return LazyLoader.load('/js/metadata/album_art_cache.js').then(() => {
+    return getSong(filePath).then((song) => {
+      return AlbumArtCache.getFullSizeBlob(song);
+    });
+  });
 }
 
 Database.init();
