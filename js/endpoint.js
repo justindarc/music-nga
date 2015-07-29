@@ -1,5 +1,7 @@
 var audio = document.getElementById('audio');
 
+var currentFilePath;
+
 var service = threads.service('music-service')
   .method('play', play)
   .method('pause', pause)
@@ -41,6 +43,8 @@ function play(filePath) {
   }
 
   getSongFile(filePath).then((file) => {
+    currentFilePath = filePath;
+
     audio.src = null;
     audio.load();
 
@@ -57,6 +61,7 @@ function pause() {
 function getPlaybackStatus() {
   return new Promise((resolve) => {
     resolve({
+      filePath: currentFilePath,
       paused: audio.paused,
       duration: audio.duration,
       elapsedTime: audio.currentTime

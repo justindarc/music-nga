@@ -1,6 +1,7 @@
 var client = threads.client('music-service', new BroadcastChannel('music-service'));
 
 function PlayerView() {
+  this.artwork = document.getElementById('artwork');
   this.seekBar = document.getElementById('seek-bar');
   this.controls = document.getElementById('controls');
 
@@ -14,6 +15,7 @@ function PlayerView() {
   client.on('elapsedTimeChange', elapsedTime => this.seekBar.elapsedTime = elapsedTime);
 
   this.getPlaybackStatus().then((status) => {
+    this.artwork.src = '/api/songs/artwork' + status.filePath;
     this.controls.paused = status.paused;
     this.seekBar.duration = status.duration;
     this.seekBar.elapsedTime = status.elapsedTime;
