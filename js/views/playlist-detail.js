@@ -13,7 +13,15 @@ function PlaylistDetailView() {
     this.playlist = playlist;
     this.render();
   });
+
+  window.addEventListener('destroy', () => this.destroy());
 }
+
+PlaylistDetailView.prototype.destroy = function() {
+  this.content = null;
+
+  this.params = null;
+};
 
 PlaylistDetailView.prototype.getPlaylist = function() {
   return fetch('/api/playlists/' + this.params.id).then(response => response.json());

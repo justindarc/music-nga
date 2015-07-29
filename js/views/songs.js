@@ -12,7 +12,13 @@ function SongsView() {
     this.songs = songs;
     this.render();
   });
+
+  window.addEventListener('destroy', () => this.destroy());
 }
+
+SongsView.prototype.destroy = function() {
+  this.content = null;
+};
 
 SongsView.prototype.getSongs = function() {
   return fetch('/api/songs').then(response => response.json());

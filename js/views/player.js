@@ -1,20 +1,20 @@
-var client = threads.client('music-service', new BroadcastChannel('music-service'));
-
 function PlayerView() {
   this.artwork = document.getElementById('artwork');
   this.seekBar = document.getElementById('seek-bar');
   this.controls = document.getElementById('controls');
 
-  this.seekBar.addEventListener('seek', (evt) => this.seek(evt.detail.elapsedTime));
+  this.seekBar.addEventListener('seek', evt => this.seek(evt.detail.elapsedTime));
 
   this.controls.addEventListener('play', () => this.play());
   this.controls.addEventListener('pause', () => this.pause());
 
-  client.on('play', () => this.controls.paused = false);
-  client.on('pause', () => this.controls.paused = true);
+  this.client = threads.client('music-service', window.parent);
 
-  client.on('durationChange', duration => this.seekBar.duration = duration);
-  client.on('elapsedTimeChange', elapsedTime => this.seekBar.elapsedTime = elapsedTime);
+  this.client.on('play', () => this.controls.paused = false);
+  this.client.on('pause', () => this.controls.paused = true);
+
+  this.client.on('durationChange', duration => this.seekBar.duration = duration);
+  this.client.on('elapsedTimeChange', elapsedTime => this.seekBar.elapsedTime = elapsedTime);
 
   this.getPlaybackStatus().then((status) => {
     this.artwork.src = '/api/songs/artwork' + status.filePath;
@@ -23,7 +23,18 @@ function PlayerView() {
     this.seekBar.elapsedTime = status.elapsedTime;
     this.render();
   });
+
+  window.addEventListener('destroy', () => this.destroy());
 }
+
+PlayerView.prototype.destroy = function() {
+  this.artwork = null;
+  this.seekBar = null;
+  this.controls = null;
+
+  this.client.destroy();
+  this.client = null;
+};
 
 PlayerView.prototype.seek = function(time) {
   fetch('/api/audio/seek/' + time);

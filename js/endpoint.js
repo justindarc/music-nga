@@ -15,6 +15,7 @@ var service = threads.service('music-service')
   .method('getSongArtwork', getSongArtwork)
   .method('getSongThumbnail', getSongThumbnail)
 
+  .listen()
   .listen(new BroadcastChannel('music-service'));
 
 audio.onloadeddata = function() {

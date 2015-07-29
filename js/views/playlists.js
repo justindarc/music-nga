@@ -5,7 +5,13 @@ function PlaylistsView() {
     this.playlists = playlists;
     this.render();
   });
+
+  window.addEventListener('destroy', () => this.destroy());
 }
+
+PlaylistsView.prototype.destroy = function() {
+  this.content = null;
+};
 
 PlaylistsView.prototype.getPlaylists = function() {
   return fetch('/api/playlists').then(response => response.json());

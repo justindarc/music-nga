@@ -67,7 +67,8 @@ proto.createdCallback = function() {
     var classList = evt.target.classList;
     if (classList.contains('pop') &&
         classList.contains('out')) {
-      evt.target.parentNode.removeChild(evt.target);
+      evt.target.contentWindow.dispatchEvent(new CustomEvent('destroy'));
+      this.container.removeChild(evt.target);
     }
 
     classList.remove('push');
@@ -86,6 +87,10 @@ proto.setRootView = function(view, params) {
     view: view,
     params: params
   };
+
+  this.states.forEach((state) => {
+    state.view.contentWindow.dispatchEvent(new CustomEvent('destroy'));
+  });
 
   this.states = [state];
 
