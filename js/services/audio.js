@@ -55,6 +55,24 @@ function AudioService(worker) {
     });
   }));
 
+  worker.get('/api/audio/seek/:time', stopAfter((request) => {
+    return new Promise((resolve) => {
+      var time = parseInt(request.parameters.time, 10);
+
+      client.method('seek', time)
+        .then(() => {
+          resolve(new Response(JSON.stringify({ success: true }), {
+            headers: { 'Content-Type': 'application/json' }
+          }));
+        })
+        .catch(() => {
+          resolve(new Response(JSON.stringify({ success: false }), {
+            headers: { 'Content-Type': 'application/json' }
+          }));
+        });
+    });
+  }));
+
   worker.get('/api/audio/status', stopAfter((request) => {
     return new Promise((resolve) => {
       client.method('getPlaybackStatus').then((status) => {

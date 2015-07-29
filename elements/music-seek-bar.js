@@ -134,6 +134,10 @@ proto.createdCallback = function() {
     else {
       this.elapsedTime = this._overrideElapsedTime = percent * this.duration;
     }
+
+    this.dispatchEvent(new CustomEvent('seek', {
+      detail: { elapsedTime: this.elapsedTime }
+    }));
   };
 
   var pointerEndHandler = (evt) => {

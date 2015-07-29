@@ -5,6 +5,8 @@ function PlayerView() {
   this.seekBar = document.getElementById('seek-bar');
   this.controls = document.getElementById('controls');
 
+  this.seekBar.addEventListener('seek', (evt) => this.seek(evt.detail.elapsedTime));
+
   this.controls.addEventListener('play', () => this.play());
   this.controls.addEventListener('pause', () => this.pause());
 
@@ -22,6 +24,10 @@ function PlayerView() {
     this.render();
   });
 }
+
+PlayerView.prototype.seek = function(time) {
+  fetch('/api/audio/seek/' + time);
+};
 
 PlayerView.prototype.play = function() {
   fetch('/api/audio/play');

@@ -5,6 +5,7 @@ var currentFilePath;
 var service = threads.service('music-service')
   .method('play', play)
   .method('pause', pause)
+  .method('seek', seek)
 
   .method('getPlaybackStatus', getPlaybackStatus)
 
@@ -56,6 +57,10 @@ function play(filePath) {
 
 function pause() {
   audio.pause();
+}
+
+function seek(time) {
+  audio.currentTime = time;
 }
 
 function getPlaybackStatus() {
