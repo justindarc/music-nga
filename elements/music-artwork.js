@@ -116,11 +116,11 @@ var template =
       <h1 id="artist"></h1>
       <h2 id="album"></h2>
     </div>
-    <button type="button" id="share" data-icon="share"></button>
+    <button type="button" data-action="share" data-icon="share"></button>
   </div>
   <div id="controls">
-    <button type="button" id="repeat" data-icon="repeat"></button>
-    <button type="button" id="shuffle" data-icon="shuffle"></button>
+    <button type="button" data-action="repeat" data-icon="repeat"></button>
+    <button type="button" data-action="shuffle" data-icon="shuffle"></button>
   </div>
 </div>`;
 
@@ -138,24 +138,28 @@ proto.createdCallback = function() {
     });
   }
 
-  var $id = shadowRoot.getElementById.bind(shadowRoot);
+  var $ = shadowRoot.querySelector.bind(shadowRoot);
 
   this.els = {
-    container: $id('container'),
-    caption:   $id('caption'),
-    controls:  $id('controls'),
-    artist:    $id('artist'),
-    album:     $id('album'),
-    share:     $id('share'),
-    repeat:    $id('repeat'),
-    shuffle:   $id('shuffle')
+    container: $('#container'),
+    caption:   $('#caption'),
+    controls:  $('#controls'),
+    artist:    $('#artist'),
+    album:     $('#album'),
+    share:     $('[data-action="share"]'),
+    repeat:    $('[data-action="repeat"]'),
+    shuffle:   $('[data-action="shuffle"]')
   };
 
   this.els.container.addEventListener('click', (evt) => {
     var button = evt.target.closest('button');
     if (!button) {
       this.overlayVisible = !this.overlayVisible;
+      return;
     }
+
+    this.overlayVisible = true;
+    this.dispatchEvent(new CustomEvent(button.dataset.action));
   });
 
   this.overlayVisible = true;

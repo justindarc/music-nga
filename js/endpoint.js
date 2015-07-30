@@ -14,6 +14,7 @@ var service = threads.service('music-service')
   .method('getSongFile', getSongFile)
   .method('getSongArtwork', getSongArtwork)
   .method('getSongThumbnail', getSongThumbnail)
+  .method('shareSong', shareSong)
 
   .listen()
   .listen(new BroadcastChannel('music-service'));
@@ -111,6 +112,39 @@ function getSongThumbnail(filePath) {
     return getSong(filePath).then((song) => {
       return AlbumArtCache.getThumbnailBlob(song);
     });
+  });
+}
+
+function shareSong(filePath) {
+  return getSong(filePath).then((song) => {
+    if (song.metadata.locked || !window.MozActivity) {
+      return;
+    }
+
+    return Promise.all([
+        getSongFile(filePath),
+        getSongThumbnail(filePath)
+      ]).then(([file, thumbnail]) => {
+        var path = song.name;
+        var filename = path.substring(path.lastIndexOf('/') + 1);
+
+        return new window.MozActivity({
+          name: 'share',
+          data: {
+            type: 'audio/*',
+            number: 1,
+            blobs: [file],
+            filenames: [filename],
+            filepaths: [path],
+            metadata: [{
+              title: song.metadata.title,
+              artist: song.metadata.artist,
+              album: song.metadata.album,
+              picture: thumbnail
+            }]
+          }
+        });
+      });
   });
 }
 

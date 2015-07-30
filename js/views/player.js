@@ -1,12 +1,14 @@
 function PlayerView() {
   this.artwork = document.getElementById('artwork');
-  this.seekBar = document.getElementById('seek-bar');
   this.controls = document.getElementById('controls');
+  this.seekBar = document.getElementById('seek-bar');
 
-  this.seekBar.addEventListener('seek', evt => this.seek(evt.detail.elapsedTime));
+  this.artwork.addEventListener('share', () => this.share());
 
   this.controls.addEventListener('play', () => this.play());
   this.controls.addEventListener('pause', () => this.pause());
+
+  this.seekBar.addEventListener('seek', evt => this.seek(evt.detail.elapsedTime));
 
   this.client = threads.client('music-service', window.parent);
 
@@ -34,8 +36,8 @@ function PlayerView() {
 
 PlayerView.prototype.destroy = function() {
   this.artwork = null;
-  this.seekBar = null;
   this.controls = null;
+  this.seekBar = null;
 
   this.client.destroy();
   this.client = null;
@@ -51,6 +53,12 @@ PlayerView.prototype.play = function() {
 
 PlayerView.prototype.pause = function() {
   fetch('/api/audio/pause');
+};
+
+PlayerView.prototype.share = function() {
+  this.getPlaybackStatus().then((status) => {
+    fetch('/api/songs/share' + status.filePath);
+  });
 };
 
 PlayerView.prototype.getPlaybackStatus = function() {

@@ -59,4 +59,19 @@ function SongsService(worker) {
         });
     });
   }));
+
+  worker.get('/api/songs/share/:filePath', stopAfter((request) => {
+    return new Promise((resolve) => {
+      var filePath = '/' + request.parameters.filePath.replace(/\%20/g, ' ');
+      client.method('shareSong', filePath)
+        .then(() => {
+          resolve(new Response(JSON.stringify({ success: true }), {
+            headers: { 'Content-Type': 'application/json' }
+          }));
+        })
+        .catch((error) => {
+          resolve(new Response(null, { status: 404 }));
+        });
+    });
+  }));
 }
