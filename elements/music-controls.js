@@ -20,22 +20,24 @@ var template =
     border: none;
     border-radius: 0;
     color: #fff;
-    font-weight: 500;
     flex: 1 0 auto;
     position: relative;
     padding: 0;
     height: 100%;
     transition: background 0.2s ease;
   }
+  #container > button:hover {
+    background: transparent;
+  }
   #container > button:active {
     background: #00caf2;
-  }
-  #container > button:hover,
-  #container > button:disabled:active {
-    background: transparent;
+    transition-duration: 0s;
   }
   #container > button:disabled {
     opacity: 0.3;
+  }
+  #container > button:disabled:active {
+    background: transparent;
   }
 </style>
 <div id="container">

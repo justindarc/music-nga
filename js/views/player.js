@@ -17,6 +17,11 @@ function PlayerView() {
   this.client.on('elapsedTimeChange', elapsedTime => this.seekBar.elapsedTime = elapsedTime);
 
   this.getPlaybackStatus().then((status) => {
+    this.getSong(status.filePath).then((song) => {
+      this.artwork.artist = song.metadata.artist;
+      this.artwork.album = song.metadata.album;
+    });
+
     this.artwork.src = '/api/songs/artwork' + status.filePath;
     this.controls.paused = status.paused;
     this.seekBar.duration = status.duration;
@@ -50,6 +55,10 @@ PlayerView.prototype.pause = function() {
 
 PlayerView.prototype.getPlaybackStatus = function() {
   return fetch('/api/audio/status').then(response => response.json());
+};
+
+PlayerView.prototype.getSong = function(filePath) {
+  return fetch('/api/songs/info' + filePath).then(response => response.json());
 };
 
 PlayerView.prototype.render = function() {
