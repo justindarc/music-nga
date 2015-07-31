@@ -14,4 +14,19 @@ function ArtistsService(worker) {
       });
     });
   }));
+
+  worker.get('/api/artists/info/:filePath', stopAfter((request) => {
+    return new Promise((resolve) => {
+      var filePath = '/' + request.parameters.filePath.replace(/\%20/g, ' ');
+      client.method('getArtist', filePath)
+        .then((songs) => {
+          resolve(new Response(JSON.stringify(songs), {
+            headers: { 'Content-Type': 'application/json' }
+          }));
+        })
+        .catch((error) => {
+          resolve(new Response(null, { status: 404 }));
+        });
+    });
+  }));
 }

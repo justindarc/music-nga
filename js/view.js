@@ -1,4 +1,11 @@
 function View() {
+  this.params = {};
+
+  window.parent.location.search.substr(1).split('&').forEach((param) => {
+    var parts = param.split('=');
+    this.params[parts[0]] = parts[1];
+  });
+
   window.addEventListener('click', (evt) => {
     if (evt.target.tagName === 'A') {
       evt.preventDefault();

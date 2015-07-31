@@ -3,14 +3,6 @@ var PlaylistDetailView = View.extend(function PlaylistDetailView() {
 
   this.content = document.getElementById('content');
 
-  this.params = {};
-
-  window.parent.location.search.substr(1).split('&').forEach((param) => {
-    var parts = param.split('=');
-
-    this.params[parts[0]] = parts[1];
-  });
-
   this.getPlaylist().then((playlist) => {
     this.playlist = playlist;
     this.render();

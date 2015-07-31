@@ -10,8 +10,10 @@ var service = threads.service('music-service')
   .method('getPlaybackStatus', getPlaybackStatus)
 
   .method('getArtists', getArtists)
+  .method('getArtist', getArtist)
 
   .method('getAlbums', getAlbums)
+  .method('getAlbum', getAlbum)
 
   .method('getSongs', getSongs)
   .method('getSong', getSong)
@@ -82,46 +84,39 @@ function getPlaybackStatus() {
 
 function getArtists() {
   return new Promise((resolve) => {
-    var artists = [];
+    Database.enumerateAll('metadata.artist', null, 'nextunique', artists => resolve(artists));
+  });
+}
 
-    Database.enumerate('metadata.artist', null, 'nextunique', (artist) => {
-      if (!artist) {
-        resolve(artists);
-        return;
-      }
+function getArtist(filePath) {
+  return getSong(filePath).then((song) => {
+    var artist = song.metadata.artist;
 
-      artists.push(artist);
+    return new Promise((resolve) => {
+      Database.enumerateAll('metadata.artist', artist, 'next', songs => resolve(songs));
     });
   });
 }
 
 function getAlbums() {
   return new Promise((resolve) => {
-    var albums = [];
+    Database.enumerateAll('metadata.album', null, 'nextunique', albums => resolve(albums));
+  });
+}
 
-    Database.enumerate('metadata.album', null, 'nextunique', (album) => {
-      if (!album) {
-        resolve(albums);
-        return;
-      }
+function getAlbum(filePath) {
+  return getSong(filePath).then((song) => {
+    var album = song.metadata.album;
 
-      albums.push(album);
+    return new Promise((resolve) => {
+      Database.enumerateAll('metadata.album', album, 'next', songs => resolve(songs));
     });
   });
 }
 
 function getSongs() {
   return new Promise((resolve) => {
-    var songs = [];
-
-    Database.enumerate('metadata.title', null, 'next', (song) => {
-      if (!song) {
-        resolve(songs);
-        return;
-      }
-
-      songs.push(song);
-    });
+    Database.enumerateAll('metadata.title', null, 'next', songs => resolve(songs));
   });
 }
 
