@@ -15,15 +15,27 @@ navigator.serviceWorker.getRegistration().then((registration) => {
     });
 });
 
-var service = threads.service('*')
-  .on('message', message => message.forward(document.getElementById('endpoint')))
-  .listen();
+var $id = document.getElementById.bind(document);
 
 var views = {};
+var isPlaying = false;
 
-var header = document.getElementById('header');
-var viewStack = document.getElementById('view-stack');
-var tabBar = document.getElementById('tab-bar');
+var service = threads.service('*')
+  .on('message', message => message.forward($id('endpoint')))
+  .listen();
+
+var client = threads.client('music-service', $id('endpoint'));
+client.connect();
+
+client.connected.then(() => {
+  client.on('play', () => isPlaying = true);
+});
+
+var header       = $id('header');
+var playerButton = $id('player-button');
+var doneButton   = $id('done-button');
+var viewStack    = $id('view-stack');
+var tabBar       = $id('tab-bar');
 
 header.addEventListener('action', (evt) => {
   if (evt.detail.type === 'back' && viewStack.states.length > 1) {
@@ -31,6 +43,8 @@ header.addEventListener('action', (evt) => {
     window.history.back();
   }
 });
+
+playerButton.addEventListener('click', () => navigateToURL('/player'));
 
 viewStack.addEventListener('change', (evt) => {
   var view = evt.detail.view;
@@ -40,6 +54,7 @@ viewStack.addEventListener('change', (evt) => {
   document.body.dataset.activeViewId = viewId;
 
   backButton.style.visibility = viewStack.states.length < 2 ? 'hidden' : 'visible';
+  playerButton.hidden = viewId === 'player' || !isPlaying;
 });
 
 tabBar.addEventListener('change', (evt) => {
