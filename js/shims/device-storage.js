@@ -69,27 +69,41 @@ function DeviceStorage(storageName) {
 
   this._files = [];
 
-  PRELOAD_FILES.forEach((path) => {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', path, true);
-    xhr.responseType = 'arraybuffer';
-    xhr.onload = () => {
-      var file = new Blob([xhr.response]);
-      file.lastModifiedDate = new Date();
-      file.name = path.replace(/\%20/g, ' ');
+  var preloadNextFile = (function(index) {
+    if (index >= PRELOAD_FILES.length) {
+      return;
+    }
 
-      this._files.push(file);
-      this.dispatchEvent('change', {
-        reason: 'created',
-        path: file.name
+    var path = PRELOAD_FILES[index];
+
+    fetch(path)
+      .then((result) => {
+        result.blob().then((file) => {
+          preloadNextFile(++index);
+
+          file.name = path.replace(/\%20/g, ' ');
+          file.lastModifiedDate = new Date();
+
+          this._files.push(file);
+
+          this.dispatchEvent('change', {
+            reason: 'created',
+            path: file.name
+          });
+          this.dispatchEvent('change', {
+            reason: 'modified',
+            path: file.name
+          });
+        });
+      })
+      .catch((error) => {
+        preloadNextFile(++index);
+
+        console.log('Unable to retrieve preloaded file', path, error);
       });
-      this.dispatchEvent('change', {
-        reason: 'modified',
-        path: file.name
-      });
-    };
-    xhr.send();
-  });
+  }).bind(this);
+
+  preloadNextFile(0);
 }
 
 DeviceStorage.prototype = new EventTarget();

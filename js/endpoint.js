@@ -9,6 +9,10 @@ var service = threads.service('music-service')
 
   .method('getPlaybackStatus', getPlaybackStatus)
 
+  .method('getArtists', getArtists)
+
+  .method('getAlbums', getAlbums)
+
   .method('getSongs', getSongs)
   .method('getSong', getSong)
   .method('getSongFile', getSongFile)
@@ -72,6 +76,36 @@ function getPlaybackStatus() {
       paused: audio.paused,
       duration: audio.duration,
       elapsedTime: audio.currentTime
+    });
+  });
+}
+
+function getArtists() {
+  return new Promise((resolve) => {
+    var artists = [];
+
+    Database.enumerate('metadata.artist', null, 'nextunique', (artist) => {
+      if (!artist) {
+        resolve(artists);
+        return;
+      }
+
+      artists.push(artist);
+    });
+  });
+}
+
+function getAlbums() {
+  return new Promise((resolve) => {
+    var albums = [];
+
+    Database.enumerate('metadata.album', null, 'nextunique', (album) => {
+      if (!album) {
+        resolve(albums);
+        return;
+      }
+
+      albums.push(album);
     });
   });
 }
