@@ -1,4 +1,6 @@
-function SongsView() {
+var SongsView = View.extend(function SongsView() {
+  View.call(this); // super();
+
   this.content = document.getElementById('content');
 
   this.content.addEventListener('click', (evt) => {
@@ -12,13 +14,11 @@ function SongsView() {
     this.songs = songs;
     this.render();
   });
+});
 
-  window.addEventListener('destroy', () => this.destroy());
-}
-
-SongsView.prototype.destroy = function() {
-  this.content = null;
-};
+// SongsView.prototype.destroy = function() {
+//   View.prototype.destroy.call(this); // super(); // Always call *last*
+// };
 
 SongsView.prototype.getSongs = function() {
   return fetch('/api/songs').then(response => response.json());

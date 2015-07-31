@@ -1,4 +1,6 @@
-function PlayerView() {
+var PlayerView = View.extend(function PlayerView() {
+  View.call(this); // super();
+
   this.artwork = document.getElementById('artwork');
   this.controls = document.getElementById('controls');
   this.seekBar = document.getElementById('seek-bar');
@@ -30,17 +32,12 @@ function PlayerView() {
     this.seekBar.elapsedTime = status.elapsedTime;
     this.render();
   });
-
-  window.addEventListener('destroy', () => this.destroy());
-}
+});
 
 PlayerView.prototype.destroy = function() {
-  this.artwork = null;
-  this.controls = null;
-  this.seekBar = null;
-
   this.client.destroy();
-  this.client = null;
+
+  View.prototype.destroy.call(this); // super(); // Always call *last*
 };
 
 PlayerView.prototype.seek = function(time) {

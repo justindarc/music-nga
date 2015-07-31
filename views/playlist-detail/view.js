@@ -1,4 +1,6 @@
-function PlaylistDetailView() {
+var PlaylistDetailView = View.extend(function PlaylistDetailView() {
+  View.call(this); // super();
+
   this.content = document.getElementById('content');
 
   this.params = {};
@@ -13,15 +15,11 @@ function PlaylistDetailView() {
     this.playlist = playlist;
     this.render();
   });
+});
 
-  window.addEventListener('destroy', () => this.destroy());
-}
-
-PlaylistDetailView.prototype.destroy = function() {
-  this.content = null;
-
-  this.params = null;
-};
+// PlaylistDetailView.prototype.destroy = function() {
+//   View.prototype.destroy.call(this); // super(); // Always call *last*
+// };
 
 PlaylistDetailView.prototype.getPlaylist = function() {
   return fetch('/api/playlists/' + this.params.id).then(response => response.json());

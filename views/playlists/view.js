@@ -1,17 +1,17 @@
-function PlaylistsView() {
+var PlaylistsView = View.extend(function PlaylistsView() {
+  View.call(this); // super();
+
   this.content = document.getElementById('content');
 
   this.getPlaylists().then((playlists) => {
     this.playlists = playlists;
     this.render();
   });
+});
 
-  window.addEventListener('destroy', () => this.destroy());
-}
-
-PlaylistsView.prototype.destroy = function() {
-  this.content = null;
-};
+// PlaylistsView.prototype.destroy = function() {
+//   View.prototype.destroy.call(this); // super(); // Always call *last*
+// };
 
 PlaylistsView.prototype.getPlaylists = function() {
   return fetch('/api/playlists').then(response => response.json());

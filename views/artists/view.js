@@ -1,12 +1,12 @@
-function ArtistsView() {
+var ArtistsView = View.extend(function ArtistsView() {
+  View.call(this); // super();
+
   this.content = document.getElementById('content');
+});
 
-  window.addEventListener('destroy', () => this.destroy());
-}
-
-ArtistsView.prototype.destroy = function() {
-  this.content = null;
-};
+// ArtistsView.prototype.destroy = function() {
+//   View.prototype.destroy.call(this); // super(); // Always call *last*
+// };
 
 ArtistsView.prototype.render = function() {
 

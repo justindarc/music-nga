@@ -1,12 +1,12 @@
-function AlbumDetailView() {
+var AlbumDetailView = View.extend(function AlbumDetailView() {
+  View.call(this); // super();
+
   this.content = document.getElementById('content');
+});
 
-  window.addEventListener('destroy', () => this.destroy());
-}
-
-AlbumDetailView.prototype.destroy = function() {
-  this.content = null;
-};
+// AlbumDetailView.prototype.destroy = function() {
+//   View.prototype.destroy.call(this); // super(); // Always call *last*
+// };
 
 AlbumDetailView.prototype.render = function() {
 

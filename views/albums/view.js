@@ -1,12 +1,12 @@
-function AlbumsView() {
+var AlbumsView = View.extend(function AlbumsView() {
+  View.call(this); // super();
+
   this.content = document.getElementById('content');
+});
 
-  window.addEventListener('destroy', () => this.destroy());
-}
-
-AlbumsView.prototype.destroy = function() {
-  this.content = null;
-};
+// AlbumsView.prototype.destroy = function() {
+//   View.prototype.destroy.call(this); // super(); // Always call *last*
+// };
 
 AlbumsView.prototype.render = function() {
 
