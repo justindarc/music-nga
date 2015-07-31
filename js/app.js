@@ -58,7 +58,7 @@ function getViewById(viewId) {
 
   view = views[viewId] = document.createElement('iframe');
   view.dataset.viewId = viewId;
-  view.src = 'views/' + viewId + '.html';
+  view.src = 'views/' + viewId + '/index.html';
 
   return view;
 }

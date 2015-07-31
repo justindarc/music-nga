@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Playlist Detail</title>
+  <title>Artists</title>
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
   <link rel="stylesheet" href="/components/gaia-fonts/style.css">
   <link rel="stylesheet" href="/components/gaia-icons/gaia-icons-embedded.css">
@@ -11,9 +11,22 @@
   <script src="/elements/music-list-item.js"></script>
 </head>
 <body class="theme-media" role="application">
-  <section id="content"></section>
+  <section id="content">
+    <a is="music-list-item"
+       href="/artist-detail?id=1"
+       title="Artist Detail (1)">
+    </a>
+    <a is="music-list-item"
+       href="/artist-detail?id=2"
+       title="Artist Detail (2)">
+    </a>
+    <a is="music-list-item"
+       href="/artist-detail?id=3"
+       title="Artist Detail (3)">
+    </a>
+  </section>
 
-  <script src="/js/views/playlist-detail.js"></script>
+  <script src="/views/artists/view.js"></script>
   <script src="/js/view.js"></script>
 </body>
 </html>
