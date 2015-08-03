@@ -136,5 +136,6 @@ function boot() {
     url = '/' + tabBar.firstElementChild.dataset.viewId;
   }
 
+  header.action = 'back';
   navigateToURL(url, true);
 }

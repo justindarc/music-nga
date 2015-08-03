@@ -31,7 +31,8 @@ a {
   transition: transform 0.2s linear, visibility 0s linear;
 }
 
-[data-active-view-id="player"] #tab-bar {
+body:not([data-active-view-id]) #tab-bar,
+body[data-active-view-id="player"] #tab-bar {
   transform: translate(0, 4.6rem);
   visibility: hidden;
   transition-delay: 0s, 0.2s;
@@ -46,7 +47,8 @@ a {
   transition: bottom 0s linear 0.2s;
 }
 
-[data-active-view-id="player"] #view-stack {
+body:not([data-active-view-id]) #view-stack,
+body[data-active-view-id="player"] #view-stack {
   bottom: 0;
   transition-delay: 0s;
 }
