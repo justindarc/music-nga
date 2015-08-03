@@ -41,19 +41,5 @@ function ArtworkService(worker) {
 }
 
 function getBlobFromURL(url) {
-  return new Promise(function(resolve, reject) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.responseType = 'blob';
-
-    xhr.onload = function() {
-      resolve(xhr.response);
-    };
-    // I don't think onerror usually gets called, but let's play it safe.
-    xhr.onerror = function() {
-      reject(null);
-    };
-
-    xhr.send();
-  });
+  return fetch(url).then(result => result.blob());
 }
