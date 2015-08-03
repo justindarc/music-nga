@@ -26,7 +26,7 @@ var PlayerView = View.extend(function PlayerView() {
       this.artwork.album = song.metadata.album;
     });
 
-    this.artwork.src = '/api/songs/artwork' + status.filePath;
+    this.artwork.src = '/api/artwork/original' + status.filePath;
     this.controls.paused = status.paused;
     this.seekBar.duration = status.duration;
     this.seekBar.elapsedTime = status.elapsedTime;

@@ -52,6 +52,7 @@ const RESOURCES = [
   '/js/metadata/vorbis_picture.js',
   '/js/services/albums.js',
   '/js/services/artists.js',
+  '/js/services/artwork.js',
   '/js/services/audio.js',
   '/js/services/playlist.js',
   '/js/services/songs.js',

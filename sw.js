@@ -2,6 +2,7 @@ importScripts('components/serviceworkerware/dist/sww.js');
 importScripts('components/sww-raw-cache/dist/sww-raw-cache.js');
 importScripts('js/services/albums.js');
 importScripts('js/services/artists.js');
+importScripts('js/services/artwork.js');
 importScripts('js/services/audio.js');
 importScripts('js/services/playlist.js');
 importScripts('js/services/songs.js');
@@ -11,6 +12,7 @@ var worker = new ServiceWorkerWare();
 
 var albumsService = new AlbumsService(worker);
 var artistsService = new ArtistsService(worker);
+var artworkService = new ArtworkService(worker);
 var audioService = new AudioService(worker);
 var playlistService = new PlaylistService(worker);
 var songsService = new SongsService(worker);

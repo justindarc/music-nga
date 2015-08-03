@@ -24,7 +24,8 @@ AlbumsView.prototype.render = function() {
     var template =
 `<a is="music-list-item"
     href="/album-detail?id=${album.name}"
-    title="${album.metadata.album}">
+    title="${album.metadata.album}"
+    thumbnail="/api/artwork/thumbnail${album.name}">
 </a>`;
 
     html += template;

@@ -25,7 +25,7 @@ function ArtistsService(worker) {
           }));
         })
         .catch((error) => {
-          resolve(new Response(null, { status: 404 }));
+          resolve(new Response('', { status: 404 }));
         });
     });
   }));

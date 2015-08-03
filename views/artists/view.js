@@ -24,7 +24,8 @@ ArtistsView.prototype.render = function() {
     var template =
 `<a is="music-list-item"
     href="/artist-detail?id=${artist.name}"
-    title="${artist.metadata.artist}">
+    title="${artist.metadata.artist}"
+    thumbnail="/api/artwork/thumbnail${artist.name}">
 </a>`;
 
     html += template;

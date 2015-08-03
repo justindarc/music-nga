@@ -37,6 +37,7 @@ SongsView.prototype.render = function() {
     href="/player?id=${song.name}"
     title="${song.metadata.title}"
     subtitle="${song.metadata.artist}"
+    thumbnail="/api/artwork/thumbnail${song.name}"
     data-file-path="${song.name}">
 </a>`;
 

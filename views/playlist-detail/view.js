@@ -24,7 +24,8 @@ PlaylistDetailView.prototype.render = function() {
     var template =
 `<a is="music-list-item"
     href="/player?id=${song.name}"
-    title="${song.title}">
+    title="${song.title}"
+    thumbnail="/api/artwork/thumbnail${song.name}">
 </a>`;
 
     html += template;

@@ -2,27 +2,19 @@ importScripts('components/threads/client.js');
 
 var client = threads.client('music-service', new BroadcastChannel('music-service'));
 
-function SongsService(worker) {
+function ArtworkService(worker) {
   var stopAfter = ServiceWorkerWare.decorators.stopAfter;
 
-  worker.get('/api/songs', stopAfter((request) => {
-    return new Promise((resolve) => {
-      client.method('getSongs').then((songs) => {
-        resolve(new Response(JSON.stringify(songs), {
-          headers: { 'Content-Type': 'application/json' }
-        }));
-      });
-    });
-  }));
-
-  worker.get('/api/songs/info/:filePath', stopAfter((request) => {
+  worker.get('/api/artwork/original/:filePath', stopAfter((request) => {
     return new Promise((resolve) => {
       var filePath = '/' + request.parameters.filePath.replace(/\%20/g, ' ');
-      client.method('getSong', filePath)
-        .then((song) => {
-          resolve(new Response(JSON.stringify(song), {
-            headers: { 'Content-Type': 'application/json' }
-          }));
+      client.method('getSongArtwork', filePath)
+        .then((url) => {
+          return getBlobFromURL(url).then((file) => {
+            resolve(new Response(file, {
+              headers: { 'Content-Type': file.type || 'application/octet-stream' }
+            }));
+          });
         })
         .catch((error) => {
           resolve(new Response('', { status: 404 }));
@@ -30,14 +22,16 @@ function SongsService(worker) {
     });
   }));
 
-  worker.get('/api/songs/share/:filePath', stopAfter((request) => {
+  worker.get('/api/artwork/thumbnail/:filePath', stopAfter((request) => {
     return new Promise((resolve) => {
       var filePath = '/' + request.parameters.filePath.replace(/\%20/g, ' ');
-      client.method('shareSong', filePath)
-        .then(() => {
-          resolve(new Response(JSON.stringify({ success: true }), {
-            headers: { 'Content-Type': 'application/json' }
-          }));
+      client.method('getSongThumbnail', filePath)
+        .then((url) => {
+          return getBlobFromURL(url).then((file) => {
+            resolve(new Response(file, {
+              headers: { 'Content-Type': file.type || 'application/octet-stream' }
+            }));
+          });
         })
         .catch((error) => {
           resolve(new Response('', { status: 404 }));
