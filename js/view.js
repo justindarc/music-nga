@@ -6,6 +6,15 @@ function View() {
     this.params[parts[0]] = parts[1];
   });
 
+  var title = typeof this.title === 'function' ? this.title() : this.title;
+  if (title instanceof Promise) {
+    title.then(title => window.parent.setHeaderTitle(title));
+  }
+
+  else {
+    window.parent.setHeaderTitle(title);
+  }
+
   window.addEventListener('click', (evt) => {
     if (evt.target.tagName === 'A') {
       evt.preventDefault();
@@ -20,6 +29,8 @@ function View() {
 View.prototype.destroy = function() {
   Object.getOwnPropertyNames(this).forEach(prop => this[prop] = null);
 };
+
+View.prototype.title = '';
 
 View.extend = function(subclass) {
   subclass.prototype = Object.create(View.prototype, {

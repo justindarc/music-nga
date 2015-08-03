@@ -20,6 +20,8 @@ var ArtistDetailView = View.extend(function ArtistDetailView() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*
 // };
 
+ArtistDetailView.prototype.title = 'Artists';
+
 ArtistDetailView.prototype.getArtist = function() {
   return fetch('/api/artists/info' + this.params.id).then(response => response.json());
 };

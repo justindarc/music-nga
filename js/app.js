@@ -32,6 +32,7 @@ client.connected.then(() => {
 });
 
 var header       = $id('header');
+var headerTitle  = $id('header-title');
 var playerButton = $id('player-button');
 var doneButton   = $id('done-button');
 var viewStack    = $id('view-stack');
@@ -57,6 +58,10 @@ viewStack.addEventListener('change', (evt) => {
   playerButton.hidden = viewId === 'player' || !isPlaying;
 });
 
+viewStack.addEventListener('pop', (evt) => {
+  setHeaderTitle(evt.detail.params.title);
+});
+
 tabBar.addEventListener('change', (evt) => {
   var tab = evt.detail.selectedElement;
   var viewId = tab.dataset.viewId;
@@ -64,6 +69,14 @@ tabBar.addEventListener('change', (evt) => {
 
   navigateToURL(url, true);
 });
+
+function setHeaderTitle(title) {
+  if (viewStack.activeState) {
+    viewStack.activeState.params.title = title;
+  }
+
+  window.requestAnimationFrame(() => headerTitle.textContent = title);
+}
 
 function getViewById(viewId) {
   var view = views[viewId];

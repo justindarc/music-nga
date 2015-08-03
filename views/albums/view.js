@@ -13,6 +13,8 @@ var AlbumsView = View.extend(function AlbumsView() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*
 // };
 
+AlbumsView.prototype.title = 'Albums';
+
 AlbumsView.prototype.getAlbums = function() {
   return fetch('/api/albums').then(response => response.json());
 };

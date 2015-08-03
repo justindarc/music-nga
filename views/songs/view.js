@@ -20,6 +20,8 @@ var SongsView = View.extend(function SongsView() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*
 // };
 
+SongsView.prototype.title = 'Songs';
+
 SongsView.prototype.getSongs = function() {
   return fetch('/api/songs').then(response => response.json());
 };

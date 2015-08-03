@@ -20,6 +20,11 @@ a {
   padding: 1rem;
 }
 
+#player-button[hidden] {
+  display: flex !important;
+  visibility: hidden;
+}
+
 #tab-bar {
   transform: translate(0, 0);
   visibility: visible;

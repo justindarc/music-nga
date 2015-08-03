@@ -40,6 +40,14 @@ PlayerView.prototype.destroy = function() {
   View.prototype.destroy.call(this); // super(); // Always call *last*
 };
 
+PlayerView.prototype.title = function() {
+  return this.getPlaybackStatus().then((status) => {
+    return this.getSong(status.filePath).then((song) => {
+      return song.metadata.title;
+    });
+  });
+};
+
 PlayerView.prototype.seek = function(time) {
   fetch('/api/audio/seek/' + time);
 };

@@ -13,6 +13,8 @@ var PlaylistDetailView = View.extend(function PlaylistDetailView() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*
 // };
 
+PlaylistDetailView.prototype.title = 'Playlists';
+
 PlaylistDetailView.prototype.getPlaylist = function() {
   return fetch('/api/playlists/' + this.params.id).then(response => response.json());
 };

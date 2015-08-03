@@ -8,6 +8,8 @@ var HomeView = View.extend(function HomeView() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*
 // };
 
+HomeView.prototype.title = 'Music';
+
 HomeView.prototype.render = function() {
 
 };

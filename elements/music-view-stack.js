@@ -85,7 +85,7 @@ proto.createdCallback = function() {
 proto.setRootView = function(view, params) {
   var state = {
     view: view,
-    params: params
+    params: params || {}
   };
 
   this.states.forEach((state) => {
@@ -104,6 +104,7 @@ proto.setRootView = function(view, params) {
   view.classList.add('active');
   this.activeState = state;
 
+  this.dispatchEvent(new CustomEvent('root', { detail: state }));
   this.dispatchEvent(new CustomEvent('change', { detail: state }));
 };
 
@@ -111,7 +112,7 @@ proto.pushView = function(view, params) {
   window.requestAnimationFrame(() => {
     var state = {
       view: view,
-      params: params
+      params: params || {}
     };
 
     this.states.push(state);
@@ -139,6 +140,7 @@ proto.pushView = function(view, params) {
       view.classList.add('transition');
     });
 
+    this.dispatchEvent(new CustomEvent('push', { detail: state }));
     this.dispatchEvent(new CustomEvent('change', { detail: state }));
   });
 };
@@ -173,6 +175,7 @@ proto.popView = function() {
       }
     });
 
+    this.dispatchEvent(new CustomEvent('pop', { detail: this.activeState }));
     this.dispatchEvent(new CustomEvent('change', { detail: this.activeState }));
   });
 };

@@ -20,6 +20,8 @@ var AlbumDetailView = View.extend(function AlbumDetailView() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*
 // };
 
+AlbumDetailView.prototype.title = 'Albums';
+
 AlbumDetailView.prototype.getAlbum = function() {
   return fetch('/api/albums/info' + this.params.id).then(response => response.json());
 };
