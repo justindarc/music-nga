@@ -114,6 +114,12 @@ proto.createdCallback = function() {
   var container = this.els.container;
   var seekBar = this.els.seekBar;
 
+  var dispatchSeekEvent = throttle(() => {
+    this.dispatchEvent(new CustomEvent('seek', {
+      detail: { elapsedTime: this.elapsedTime }
+    }));
+  }, 100);
+
   container.addEventListener(isTouch ? 'touchstart' : 'mousedown', (evt) => {
     container.addEventListener(isTouch ? 'touchmove' : 'mousemove', pointerMoveHandler);
     container.addEventListener(isTouch ? 'touchend' : 'mouseup', pointerEndHandler);
@@ -135,9 +141,7 @@ proto.createdCallback = function() {
       this.elapsedTime = this._overrideElapsedTime = percent * this.duration;
     }
 
-    this.dispatchEvent(new CustomEvent('seek', {
-      detail: { elapsedTime: this.elapsedTime }
-    }));
+    dispatchSeekEvent();
   };
 
   var pointerEndHandler = (evt) => {
@@ -226,6 +230,27 @@ Object.defineProperty(proto, 'remainingTime', {
     this.els.seekBarIndicator.style.transform = 'translateX(' + x + 'px)';
   }
 });
+
+function throttle(fn, ms) {
+  var last = Date.now();
+  var timeout;
+  return () => {
+    var args = arguments;
+    var now = Date.now();
+    if (now < last + ms) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        last = now;
+        fn.apply(this, args);
+      }, ms);
+    }
+
+    else {
+      last = now;
+      fn.apply(this, args);
+    }
+  };
+}
 
 function clamp(min, max, value) {
   return Math.min(Math.max(min, value), max);

@@ -6,23 +6,17 @@ var musicdb; // XXX
 
 var App = {}; // XXX
 
-App.refreshViews = throttle(() => { // XXX
+App.refreshViews = debounce(() => { // XXX
   console.log('**** databaseChange ****');
   service.broadcast('databaseChange');
 }, 500);
 
-function throttle(callback, milliseconds) { // XXX
+function debounce(fn, ms) { // XXX
   var timeout;
-
   return () => {
     var args = arguments;
-    var execute = () => {
-      timeout = null;
-      callback.apply(this, args);
-    };
-
     clearTimeout(timeout);
-    timeout = setTimeout(execute, milliseconds);
+    timeout = setTimeout(() => fn.apply(this, args), ms);
   };
 }
 
