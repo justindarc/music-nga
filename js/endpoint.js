@@ -134,7 +134,7 @@ function getSongFile(filePath) {
 function getSongArtwork(filePath) {
   return LazyLoader.load('/js/metadata/album_art_cache.js').then(() => {
     return getSong(filePath).then((song) => {
-      return AlbumArtCache.getFullSizeURL(song);
+      return AlbumArtCache.getFullSizeBlob(song);
     });
   });
 }
@@ -142,7 +142,7 @@ function getSongArtwork(filePath) {
 function getSongThumbnail(filePath) {
   return LazyLoader.load('/js/metadata/album_art_cache.js').then(() => {
     return getSong(filePath).then((song) => {
-      return AlbumArtCache.getThumbnailURL(song);
+      return AlbumArtCache.getThumbnailBlob(song);
     });
   });
 }
