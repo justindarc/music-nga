@@ -20,6 +20,10 @@ var PlayerView = View.extend(function PlayerView() {
   this.client.on('durationChange', duration => this.seekBar.duration = duration);
   this.client.on('elapsedTimeChange', elapsedTime => this.seekBar.elapsedTime = elapsedTime);
 
+  this.update();
+});
+
+PlayerView.prototype.update = function() {
   this.getPlaybackStatus().then((status) => {
     this.getSong(status.filePath).then((song) => {
       this.artwork.artist = song.metadata.artist;
@@ -32,7 +36,7 @@ var PlayerView = View.extend(function PlayerView() {
     this.seekBar.elapsedTime = status.elapsedTime;
     this.render();
   });
-});
+};
 
 PlayerView.prototype.destroy = function() {
   this.client.destroy();

@@ -3,11 +3,19 @@ var ArtistsView = View.extend(function ArtistsView() {
 
   this.content = document.getElementById('content');
 
+  this.client = threads.client('music-service', window.parent);
+
+  this.client.on('databaseChange', () => this.update());
+
+  this.update();
+});
+
+ArtistsView.prototype.update = function() {
   this.getArtists().then((artists) => {
     this.artists = artists;
     this.render();
   });
-});
+};
 
 // ArtistsView.prototype.destroy = function() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*

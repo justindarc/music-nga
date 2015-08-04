@@ -10,11 +10,19 @@ var SongsView = View.extend(function SongsView() {
     }
   });
 
+  this.client = threads.client('music-service', window.parent);
+
+  this.client.on('databaseChange', () => this.update());
+
+  this.update();
+});
+
+SongsView.prototype.update = function() {
   this.getSongs().then((songs) => {
     this.songs = songs;
     this.render();
   });
-});
+};
 
 // SongsView.prototype.destroy = function() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*

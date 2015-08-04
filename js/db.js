@@ -4,6 +4,28 @@
 
 var musicdb; // XXX
 
+var App = {}; // XXX
+
+App.refreshViews = throttle(() => { // XXX
+  console.log('**** databaseChange ****');
+  service.broadcast('databaseChange');
+}, 500);
+
+function throttle(callback, milliseconds) { // XXX
+  var timeout;
+
+  return () => {
+    var args = arguments;
+    var execute = () => {
+      timeout = null;
+      callback.apply(this, args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(execute, milliseconds);
+  };
+}
+
 var Database = (function() {
   // The MediaDB object that manages the filesystem and the database of metadata
   // See init()
@@ -153,8 +175,7 @@ var Database = (function() {
         filesFoundWhileScanning = 0;
         filesFoundBatch = 0;
         filesDeletedWhileScanning = 0;
-        // App.refreshViews();
-        console.log('XXX: App.refreshViews()');
+        App.refreshViews();
       }
 
       // If this was the first scan after startup, tell the performance monitors
@@ -187,8 +208,7 @@ var Database = (function() {
 
         if (filesFoundBatch > SCAN_UPDATE_BATCH_SIZE) {
           filesFoundBatch = 0;
-          // App.refreshViews();
-          console.log('XXX: App.refreshViews()');
+          App.refreshViews();
         }
       }
       else {
@@ -196,8 +216,7 @@ var Database = (function() {
         // there was probably a new song saved via bluetooth or MMS.
         // We don't have any way to be clever about it; we just have to
         // redisplay the entire view
-        // App.refreshViews();
-        console.log('XXX: App.refreshViews()');
+        App.refreshViews();
       }
     };
 
@@ -221,8 +240,7 @@ var Database = (function() {
         }
         deleteTimer = setTimeout(function() {
           deleteTimer = null;
-          // App.refreshViews();
-          console.log('XXX: App.refreshViews()');
+          App.refreshViews();
         }, DELETE_BATCH_TIMEOUT);
       }
     };

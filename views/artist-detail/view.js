@@ -10,11 +10,19 @@ var ArtistDetailView = View.extend(function ArtistDetailView() {
     }
   });
 
+  this.client = threads.client('music-service', window.parent);
+
+  this.client.on('databaseChange', () => this.update());
+
+  this.update();
+});
+
+ArtistDetailView.prototype.update = function() {
   this.getArtist().then((songs) => {
     this.songs = songs;
     this.render();
   });
-});
+};
 
 // ArtistDetailView.prototype.destroy = function() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*

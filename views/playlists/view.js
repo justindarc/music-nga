@@ -3,11 +3,19 @@ var PlaylistsView = View.extend(function PlaylistsView() {
 
   this.content = document.getElementById('content');
 
+  this.client = threads.client('music-service', window.parent);
+
+  this.client.on('databaseChange', () => this.update());
+
+  this.update();
+});
+
+PlaylistsView.prototype.update = function() {
   this.getPlaylists().then((playlists) => {
     this.playlists = playlists;
     this.render();
   });
-});
+};
 
 // PlaylistsView.prototype.destroy = function() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*

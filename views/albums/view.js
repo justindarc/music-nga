@@ -3,11 +3,19 @@ var AlbumsView = View.extend(function AlbumsView() {
 
   this.content = document.getElementById('content');
 
+  this.client = threads.client('music-service', window.parent);
+
+  this.client.on('databaseChange', () => this.update());
+
+  this.update();
+});
+
+AlbumsView.prototype.update = function() {
   this.getAlbums().then((albums) => {
     this.albums = albums;
     this.render();
   });
-});
+};
 
 // AlbumsView.prototype.destroy = function() {
 //   View.prototype.destroy.call(this); // super(); // Always call *last*
