@@ -7,7 +7,7 @@ function ArtworkService(worker) {
 
   worker.get('/api/artwork/original/:filePath', stopAfter((request) => {
     return new Promise((resolve) => {
-      var filePath = '/' + request.parameters.filePath.replace(/\%20/g, ' ');
+      var filePath = '/' + decodeURIComponent(request.parameters.filePath);
       client.method('getSongArtwork', filePath)
         .then((url) => {
           return getBlobFromURL(url).then((file) => {
@@ -24,7 +24,7 @@ function ArtworkService(worker) {
 
   worker.get('/api/artwork/thumbnail/:filePath', stopAfter((request) => {
     return new Promise((resolve) => {
-      var filePath = '/' + request.parameters.filePath.replace(/\%20/g, ' ');
+      var filePath = '/' + decodeURIComponent(request.parameters.filePath);
       client.method('getSongThumbnail', filePath)
         .then((url) => {
           return getBlobFromURL(url).then((file) => {

@@ -128,11 +128,11 @@ var Database = (function() {
 
     function startupOnEnumerable() {
       // App.dbEnumerable(function() {
-      //   if (musicdb.state === MediaDB.READY) {
-      //     onReady();
-      //   } else {
-      //     musicdb.onready = onReady;
-      //   }
+        if (musicdb.state === MediaDB.READY) {
+          onReady();
+        } else {
+          musicdb.onready = onReady;
+        }
       // });
       console.log('XXX: App.dbEnumerable(...)');
     }
@@ -142,6 +142,7 @@ var Database = (function() {
       //   // Start scanning for new music
       //   musicdb.scan();
       // });
+      musicdb.scan(); // XXX
       console.log('XXX: App.dbReady(...)');
 
       // Subsequent onready events need to refresh the UI.

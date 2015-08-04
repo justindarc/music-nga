@@ -23,7 +23,7 @@ function AudioService(worker) {
 
   worker.get('/api/audio/play/:filePath', stopAfter((request) => {
     return new Promise((resolve) => {
-      var filePath = '/' + request.parameters.filePath.replace(/\%20/g, ' ');
+      var filePath = '/' + decodeURIComponent(request.parameters.filePath);
 
       client.method('play', filePath)
         .then(() => {

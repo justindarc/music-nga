@@ -81,7 +81,7 @@ function DeviceStorage(storageName) {
         result.blob().then((file) => {
           preloadNextFile(++index);
 
-          file.name = path.replace(/\%20/g, ' ');
+          file.name = decodeURIComponent(path);
           file.lastModifiedDate = new Date();
 
           this._files.push(file);

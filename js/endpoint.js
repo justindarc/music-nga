@@ -105,6 +105,7 @@ function getAlbums() {
 }
 
 function getAlbum(filePath) {
+  console.log('getAlbum()', filePath);
   return getSong(filePath).then((song) => {
     var album = song.metadata.album;
 
@@ -121,10 +122,12 @@ function getSongs() {
 }
 
 function getSong(filePath) {
+  console.log('getSong()', filePath);
   return Database.getFileInfo(filePath);
 }
 
 function getSongFile(filePath) {
+  console.log('getSongFile()', filePath);
   return Database.getFile(filePath);
 }
 
