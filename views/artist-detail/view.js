@@ -1,9 +1,33 @@
+/*global threads,View*/
+
 var ArtistDetailView = View.extend(function ArtistDetailView() {
   View.call(this); // super();
 
-  this.content = document.getElementById('content');
+  this.list = document.querySelector('gaia-fast-list');
+  this.list.configure({
 
-  this.content.addEventListener('click', (evt) => {
+    // We won't need this after <gaia-fast-list>
+    // gets proper dynamic <template> input
+    populateItem: function(el, i) {
+      var data = this.getRecordAt(i);
+      var els = {};
+
+      els.link = el.firstChild;
+      els.div = els.link.firstChild;
+      els.title = els.div.firstChild;
+      els.body = els.title.nextSibling;
+
+      els.link.href = `/player?id=${data.name}`;
+      els.link.dataset.filePath = data.name;
+
+      els.title.firstChild.data = data.metadata.title;
+    }
+  });
+
+  // Triggers player service to begin playing the track.
+  // This works for now, but we might have the PlayerView
+  // take care of this task as it's a big more webby :)
+  this.list.addEventListener('click', (evt) => {
     var link = evt.target.closest('a[data-file-path]');
     if (link) {
       this.play(link.dataset.filePath);
@@ -11,7 +35,6 @@ var ArtistDetailView = View.extend(function ArtistDetailView() {
   });
 
   this.client = threads.client('music-service', window.parent);
-
   this.client.on('databaseChange', () => this.update());
 
   this.update();
@@ -19,8 +42,7 @@ var ArtistDetailView = View.extend(function ArtistDetailView() {
 
 ArtistDetailView.prototype.update = function() {
   this.getArtist().then((songs) => {
-    this.songs = songs;
-    this.render();
+    this.list.model = songs;
   });
 };
 
@@ -36,27 +58,6 @@ ArtistDetailView.prototype.getArtist = function() {
 
 ArtistDetailView.prototype.play = function(filePath) {
   fetch('/api/audio/play' + filePath);
-};
-
-ArtistDetailView.prototype.render = function() {
-  View.prototype.render.call(this); // super();
-
-  var html = '';
-
-  this.songs.forEach((song) => {
-    var template =
-`<a is="music-list-item"
-    href="/player?id=${song.name}"
-    title="${song.metadata.title}"
-    subtitle="${song.metadata.artist}"
-    thumbnail="/api/artwork/thumbnail${song.name}"
-    data-file-path="${song.name}">
-</a>`;
-
-    html += template;
-  });
-
-  this.content.innerHTML = html;
 };
 
 window.view = new ArtistDetailView();

@@ -1,3 +1,5 @@
+var debug = 1 ? (...args) => console.log('[View]', ...args) : ()=>{};
+
 function View() {
   this.params = {};
 
@@ -15,11 +17,12 @@ function View() {
     window.parent.setHeaderTitle(title);
   }
 
-  window.addEventListener('click', (evt) => {
-    if (evt.target.tagName === 'A') {
-      evt.preventDefault();
-
-      window.parent.navigateToURL(evt.target.getAttribute('href'));
+  window.addEventListener('click', e => {
+    var link = e.target.closest('a');
+    if (link) {
+      debug('link clicked');
+      e.preventDefault();
+      window.parent.navigateToURL(link.getAttribute('href'));
     }
   });
 
