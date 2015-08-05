@@ -28,6 +28,8 @@ ArtistsView.prototype.getArtists = function() {
 };
 
 ArtistsView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+
   var html = '';
 
   this.artists.forEach((artist) => {

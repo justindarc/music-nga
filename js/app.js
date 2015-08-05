@@ -1,3 +1,24 @@
+function perfMark(marker) {
+  window.performance.mark(marker);
+  perfMark[marker] = Date.now();
+}
+
+perfMark.get = (marker) => {
+  var start = window.performance.timing.fetchStart; // domLoading?
+  return perfMark[marker] - start;
+};
+
+perfMark.log = () => Object.keys(perfMark).forEach((marker) => {
+  if (typeof perfMark[marker] !== 'function') {
+    console.log('[Performance] ' + marker + ': ' + perfMark.get(marker) + 'ms');
+  }
+});
+
+// PERFORMANCE MARKER (1): navigationLoaded
+// Designates that the app's *core* chrome or navigation interface
+// exists in the DOM and is marked as ready to be displayed.
+perfMark('navigationLoaded');
+
 navigator.serviceWorker.getRegistration().then((registration) => {
   if (registration && registration.active) {
     console.log('ServiceWorker already registered');
@@ -104,6 +125,10 @@ function navigateToURL(url, replaceRoot) {
     tabBar.selectedElement = tab;
   }
 
+  if (!perfMark.visuallyLoaded) {
+    view.addEventListener('rendered', onVisuallyLoaded);
+  }
+
   if (replaceRoot) {
     viewStack.setRootView(view, params);
   }
@@ -130,6 +155,30 @@ function parseQueryString(queryString) {
   return query;
 }
 
+function onVisuallyLoaded() {
+  this.removeEventListener('rendered', onVisuallyLoaded);
+
+  // PERFORMANCE MARKER (3): visuallyLoaded
+  // Designates that the app is visually loaded (e.g.: all of the
+  // "above-the-fold" content exists in the DOM and is marked as
+  // ready to be displayed).
+  perfMark('visuallyLoaded');
+
+  // PERFORMANCE MARKER (4): contentInteractive
+  // Designates that the app has its events bound for the minimum
+  // set of functionality to allow the user to interact with the
+  // "above-the-fold" content.
+  perfMark('contentInteractive');
+
+  // PERFORMANCE MARKER (5): fullyLoaded
+  // Designates that the app is *completely* loaded and all relevant
+  // "below-the-fold" content exists in the DOM, is marked visible,
+  // has its events bound and is ready for user interaction. All
+  // required startup background processing should be complete.
+  perfMark('fullyLoaded');
+  perfMark.log();
+}
+
 function boot() {
   var url = window.location.href.substring(window.location.origin.length);
   if (url === '/' || url === '/index.html') {
@@ -138,4 +187,9 @@ function boot() {
 
   header.action = 'back';
   navigateToURL(url, true);
+
+  // PERFORMANCE MARKER (2): navigationInteractive
+  // Designates that the app's *core* chrome or navigation interface
+  // has its events bound and is ready for user interaction.
+  perfMark('navigationInteractive');
 }

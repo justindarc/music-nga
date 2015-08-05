@@ -39,6 +39,8 @@ AlbumDetailView.prototype.play = function(filePath) {
 };
 
 AlbumDetailView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+
   var html = '';
 
   this.songs.forEach((song) => {

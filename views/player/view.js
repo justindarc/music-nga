@@ -79,7 +79,7 @@ PlayerView.prototype.getSong = function(filePath) {
 };
 
 PlayerView.prototype.render = function() {
-
+  View.prototype.render.call(this); // super();
 };
 
 window.view = new PlayerView();

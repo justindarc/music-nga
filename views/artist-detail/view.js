@@ -39,6 +39,8 @@ ArtistDetailView.prototype.play = function(filePath) {
 };
 
 ArtistDetailView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+
   var html = '';
 
   this.songs.forEach((song) => {

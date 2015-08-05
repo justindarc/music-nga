@@ -28,6 +28,8 @@ AlbumsView.prototype.getAlbums = function() {
 };
 
 AlbumsView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+
   var html = '';
 
   this.albums.forEach((album) => {

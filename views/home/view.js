@@ -11,7 +11,7 @@ var HomeView = View.extend(function HomeView() {
 });
 
 HomeView.prototype.update = function() {
-
+  this.render();
 };
 
 // HomeView.prototype.destroy = function() {
@@ -21,7 +21,7 @@ HomeView.prototype.update = function() {
 HomeView.prototype.title = 'Music';
 
 HomeView.prototype.render = function() {
-
+  View.prototype.render.call(this); // super();
 };
 
 window.view = new HomeView();

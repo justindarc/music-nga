@@ -28,6 +28,8 @@ PlaylistDetailView.prototype.getPlaylist = function() {
 };
 
 PlaylistDetailView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+
   var html = '';
 
   this.playlist.songs.forEach((song) => {

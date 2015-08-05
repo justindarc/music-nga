@@ -39,6 +39,8 @@ SongsView.prototype.play = function(filePath) {
 };
 
 SongsView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+
   var html = '';
 
   this.songs.forEach((song) => {
