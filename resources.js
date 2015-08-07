@@ -20,6 +20,7 @@ const RESOURCES = [
   '/elements/music-artwork.js',
   '/elements/music-controls.js',
   '/elements/music-list-item.js',
+  '/elements/music-search.js',
   '/elements/music-seek-bar.js',
   '/elements/music-tab-bar.js',
   '/elements/music-view-stack.js',

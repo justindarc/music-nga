@@ -2,6 +2,7 @@ var SongsView = View.extend(function SongsView() {
   View.call(this); // super();
 
   this.content = document.getElementById('content');
+  this.search = document.getElementById('search');
 
   this.content.addEventListener('click', (evt) => {
     var link = evt.target.closest('a[data-file-path]');
@@ -9,6 +10,9 @@ var SongsView = View.extend(function SongsView() {
       this.play(link.dataset.filePath);
     }
   });
+
+  this.search.addEventListener('open', () => window.parent.onSearchOpen());
+  this.search.addEventListener('close', () => window.parent.onSearchClose());
 
   this.client = threads.client('music-service', window.parent);
 

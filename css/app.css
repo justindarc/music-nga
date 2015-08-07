@@ -20,22 +20,10 @@ a {
   padding: 1rem;
 }
 
-#player-button[hidden] {
-  display: flex !important;
-  visibility: hidden;
-}
-
 #tab-bar {
   transform: translate(0, 0);
   visibility: visible;
   transition: transform 0.2s linear, visibility 0s linear;
-}
-
-body:not([data-active-view-id]) #tab-bar,
-body[data-active-view-id="player"] #tab-bar {
-  transform: translate(0, 4.6rem);
-  visibility: hidden;
-  transition-delay: 0s, 0.2s;
 }
 
 #view-stack {
@@ -45,6 +33,30 @@ body[data-active-view-id="player"] #tab-bar {
   left: 0;
   width: 100%;
   transition: bottom 0s linear 0.2s;
+}
+
+#player-button[hidden],
+body[data-search="true"] #player-button {
+  display: flex !important;
+  visibility: hidden;
+}
+
+body[data-search="true"] #header,
+body[data-search="true"] #tab-bar {
+  display: none !important;
+}
+
+body[data-search="true"] #view-stack {
+  top: 0;
+  bottom: 0;
+  transition: none;
+}
+
+body:not([data-active-view-id]) #tab-bar,
+body[data-active-view-id="player"] #tab-bar {
+  transform: translate(0, 4.6rem);
+  visibility: hidden;
+  transition-delay: 0s, 0.2s;
 }
 
 body:not([data-active-view-id]) #view-stack,

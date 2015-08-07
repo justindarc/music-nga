@@ -17,6 +17,10 @@ body {
   height: 100%;
 }
 
+#content {
+  min-height: 100%;
+}
+
 music-artwork {
   display: block;
   width: 100%;

@@ -155,6 +155,14 @@ function parseQueryString(queryString) {
   return query;
 }
 
+function onSearchOpen() {
+  document.body.dataset.search = true;
+}
+
+function onSearchClose() {
+  document.body.removeAttribute('data-search');
+}
+
 function onVisuallyLoaded() {
   this.removeEventListener('rendered', onVisuallyLoaded);
 
