@@ -1,8 +1,12 @@
+/* global threads, View */
+
+var debug = 1 ? (...args) => console.log('[HomeView]', ...args) : () => {};
+
 var HomeView = View.extend(function HomeView() {
   View.call(this); // super();
 
-  this.content = document.getElementById('content');
   this.search = document.getElementById('search');
+  this.content = document.getElementById('content');
 
   this.search.addEventListener('open', () => window.parent.onSearchOpen());
   this.search.addEventListener('close', () => window.parent.onSearchClose());

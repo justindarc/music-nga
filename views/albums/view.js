@@ -1,12 +1,12 @@
-/*global View, threads*/
+/* global threads, View */
 
-var debug = 1 ? (...args) => console.log('[AlbumsView]', ...args) : ()=>{};
+var debug = 1 ? (...args) => console.log('[AlbumsView]', ...args) : () => {};
 
 var AlbumsView = View.extend(function AlbumsView() {
   View.call(this); // super();
 
   this.search = document.getElementById('search');
-  this.list = document.querySelector('gaia-fast-list');
+  this.list = document.getElementById('list');
 
   this.search.addEventListener('open', () => window.parent.onSearchOpen());
   this.search.addEventListener('close', () => window.parent.onSearchClose());
@@ -24,17 +24,18 @@ var AlbumsView = View.extend(function AlbumsView() {
     }
   });
 
+  View.preserveListScrollPosition(this.list);
+
   this.client = threads.client('music-service', window.parent);
   this.client.on('databaseChange', () => this.update());
 
   this.update();
-  debug('initialized');
 });
 
 AlbumsView.prototype.update = function() {
-  this.getAlbums().then(albums => {
-    debug('got albums', albums);
-    this.list.model = albums;
+  this.getAlbums().then((albums) => {
+    this.albums = albums;
+    this.render();
   });
 };
 
@@ -43,6 +44,12 @@ AlbumsView.prototype.update = function() {
 // };
 
 AlbumsView.prototype.title = 'Albums';
+
+AlbumsView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+
+  this.list.model = this.albums;
+};
 
 AlbumsView.prototype.getAlbums = function() {
   return fetch('/api/albums')

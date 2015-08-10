@@ -1,4 +1,6 @@
-var debug = 1 ? (...args) => console.log('[View]', ...args) : ()=>{};
+window.View = (function() {
+
+var debug = 1 ? (...args) => console.log('[View]', ...args) : () => {};
 
 function View() {
   this.params = {};
@@ -17,16 +19,16 @@ function View() {
     window.parent.setHeaderTitle(title);
   }
 
-  window.addEventListener('click', e => {
-    var link = e.target.closest('a');
+  window.addEventListener('click', (evt) => {
+    var link = evt.target.closest('a');
     if (link) {
-      debug('link clicked');
-      e.preventDefault();
+      debug('Received "click" event on link', link);
+      evt.preventDefault();
       window.parent.navigateToURL(link.getAttribute('href'));
     }
   });
 
-  window.addEventListener('destroy', () => this.destroy());
+  window.addEventListener('viewdestroy', () => this.destroy());
 }
 
 View.prototype.destroy = function() {
@@ -39,6 +41,19 @@ View.prototype.render = function() {
   if (window.frameElement) {
     window.frameElement.dispatchEvent(new CustomEvent('rendered'));
   }
+
+  debug('Rendered');
+};
+
+View.preserveListScrollPosition = function(list) {
+  var lastScrollTop;
+  window.addEventListener('viewhidden', () => {
+    lastScrollTop = list._list.scrollTop;
+  });
+
+  window.addEventListener('viewvisible', () => {
+    list._list.scrollInstantly(lastScrollTop);
+  });
 };
 
 View.extend = function(subclass) {
@@ -55,3 +70,7 @@ View.extend = function(subclass) {
 
   return subclass;
 };
+
+return View;
+
+})();

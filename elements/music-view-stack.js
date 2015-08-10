@@ -67,7 +67,7 @@ proto.createdCallback = function() {
     var classList = evt.target.classList;
     if (classList.contains('pop') &&
         classList.contains('out')) {
-      evt.target.contentWindow.dispatchEvent(new CustomEvent('destroy'));
+      evt.target.contentWindow.dispatchEvent(new CustomEvent('viewdestroy'));
       this.container.removeChild(evt.target);
     }
 
@@ -89,17 +89,18 @@ proto.setRootView = function(view, params) {
   };
 
   this.states.forEach((state) => {
-    state.view.contentWindow.dispatchEvent(new CustomEvent('destroy'));
+    state.view.contentWindow.dispatchEvent(new CustomEvent('viewdestroy'));
   });
+
+  if (this.activeState && this.activeState.view) {
+    this.activeState.view.classList.remove('active');
+    this.activeState.view.contentWindow.dispatchEvent(new CustomEvent('viewhidden'));
+  }
 
   this.states = [state];
 
   this.container.innerHTML = '';
   this.container.appendChild(view);
-
-  if (this.activeState && this.activeState.view) {
-    this.activeState.view.classList.remove('active');
-  }
 
   view.classList.add('active');
   this.activeState = state;
@@ -124,6 +125,7 @@ proto.pushView = function(view, params) {
       oldActiveView.classList.remove('active');
       oldActiveView.classList.add('push');
       oldActiveView.classList.add('out');
+      oldActiveView.contentWindow.dispatchEvent(new CustomEvent('viewhidden'));
     }
 
     this.activeState = state;
@@ -131,6 +133,7 @@ proto.pushView = function(view, params) {
     view.classList.add('active');
     view.classList.add('push');
     view.classList.add('in');
+    view.contentWindow.dispatchEvent(new CustomEvent('viewvisible'));
 
     window.requestAnimationFrame(() => {
       if (oldActiveView) {
@@ -157,6 +160,7 @@ proto.popView = function() {
     oldActiveView.classList.remove('active');
     oldActiveView.classList.add('pop');
     oldActiveView.classList.add('out');
+    oldActiveView.contentWindow.dispatchEvent(new CustomEvent('viewhidden'));
 
     this.activeState = this.states[this.states.length - 1];
 
@@ -165,6 +169,7 @@ proto.popView = function() {
       activeView.classList.add('active');
       activeView.classList.add('pop');
       activeView.classList.add('in');
+      activeView.contentWindow.dispatchEvent(new CustomEvent('viewvisible'));
     }
 
     window.requestAnimationFrame(() => {

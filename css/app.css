@@ -52,7 +52,6 @@ body[data-search="true"] #view-stack {
   transition: none;
 }
 
-body:not([data-active-view-id]) #tab-bar,
 body[data-active-view-id="player"] #tab-bar {
   transform: translate(0, 4.6rem);
   visibility: hidden;

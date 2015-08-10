@@ -89,7 +89,6 @@ const RESOURCES = [
   '/views/playlists/view.js',
   '/views/songs/index.html',
   '/views/songs/view.js',
-  '/views/songs/list-data-source.js',
   '/endpoint.html',
   '/manifest.webapp'
 ];

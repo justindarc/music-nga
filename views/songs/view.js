@@ -1,24 +1,18 @@
-/*
-global
-View,
-DataSource,
-FastList,
-scheduler,
-threads
-*/
+/* global threads, View */
 
-var debug = 0 ? (...args) => console.log('[SongsView]', ...args) : ()=>{};
+var debug = 1 ? (...args) => console.log('[SongsView]', ...args) : () => {};
 
 var SongsView = View.extend(function SongsView() {
   View.call(this); // super();
 
-  this.list = document.querySelector('gaia-fast-list');
   this.search = document.getElementById('search');
+  this.list = document.getElementById('list');
 
-  var cached = this.getCache();
+  this.search.addEventListener('open', () => window.parent.onSearchOpen());
+  this.search.addEventListener('close', () => window.parent.onSearchClose());
 
   this.list.configure({
-    model: cached || [],
+    model: this.getCache(),
 
     getSectionName(item) {
       return item.metadata.title[0].toUpperCase();
@@ -28,23 +22,18 @@ var SongsView = View.extend(function SongsView() {
     // gets proper dynamic <template> input
     populateItem: function(el, i) {
       var data = this.getRecordAt(i);
-      var els = {};
 
-      els.link = el.firstChild;
-      els.div = els.link.firstChild;
-      els.title = els.div.firstChild;
-      els.body = els.title.nextSibling;
+      var link = el.querySelector('a');
+      var title = el.querySelector('h3');
+      var subtitle = el.querySelector('p');
 
-      els.link.href = `/player?id=${data.name}`;
-      els.link.dataset.filePath = data.name;
+      link.href = `/player?id=${data.name}`;
+      link.dataset.filePath = data.name;
 
-      els.title.firstChild.data = data.metadata.title;
-      els.body.firstChild.data = data.metadata.artist;
+      title.firstChild.data = data.metadata.title;
+      subtitle.firstChild.data = data.metadata.artist;
     }
   });
-
-  this.search.addEventListener('open', () => window.parent.onSearchOpen());
-  this.search.addEventListener('close', () => window.parent.onSearchClose());
 
   this.list.addEventListener('click', (evt) => {
     var link = evt.target.closest('a[data-file-path]');
@@ -52,6 +41,8 @@ var SongsView = View.extend(function SongsView() {
       this.play(link.dataset.filePath);
     }
   });
+
+  View.preserveListScrollPosition(this.list);
 
   this.client = threads.client('music-service', window.parent);
   this.client.on('databaseChange', () => this.update());
@@ -61,9 +52,9 @@ var SongsView = View.extend(function SongsView() {
 
 SongsView.prototype.update = function() {
   this.getSongs().then((songs) => {
-    debug('got songs', songs);
-    this.list.model = songs;
-  }).catch(debug);
+    this.songs = songs;
+    this.render();
+  });
 };
 
 // SongsView.prototype.destroy = function() {
@@ -72,12 +63,18 @@ SongsView.prototype.update = function() {
 
 SongsView.prototype.title = 'Songs';
 
+SongsView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+
+  this.list.model = this.songs;
+};
+
 SongsView.prototype.getSongs = function() {
-  console.time('get songs');
+  console.time('getSongs');
   return fetch('/api/songs')
     .then(response => response.json())
     .then(songs => {
-      console.timeEnd('get songs');
+      console.timeEnd('getSongs');
       this.setCache(songs.slice(0, 10));
       return songs;
     });
@@ -94,8 +91,7 @@ SongsView.prototype.setCache = function(items) {
 };
 
 SongsView.prototype.getCache = function() {
-  var items = localStorage.getItem('cache:songs');
-  return items && JSON.parse(items);
+  return JSON.parse(localStorage.getItem('cache:songs')) || [];
 };
 
 window.view = new SongsView();

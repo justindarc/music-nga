@@ -1,3 +1,7 @@
+/* global threads, View */
+
+var debug = 1 ? (...args) => console.log('[PlayerView]', ...args) : () => {};
+
 var PlayerView = View.extend(function PlayerView() {
   View.call(this); // super();
 
@@ -52,6 +56,10 @@ PlayerView.prototype.title = function() {
   });
 };
 
+PlayerView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+};
+
 PlayerView.prototype.seek = function(time) {
   fetch('/api/audio/seek/' + time);
 };
@@ -76,10 +84,6 @@ PlayerView.prototype.getPlaybackStatus = function() {
 
 PlayerView.prototype.getSong = function(filePath) {
   return fetch('/api/songs/info' + filePath).then(response => response.json());
-};
-
-PlayerView.prototype.render = function() {
-  View.prototype.render.call(this); // super();
 };
 
 window.view = new PlayerView();

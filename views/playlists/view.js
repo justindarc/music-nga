@@ -1,12 +1,12 @@
-/*global threads,View*/
+/* global threads, View */
 
 var debug = 1 ? (...args) => console.log('[PlaylistsView]', ...args) : () => {};
 
 var PlaylistsView = View.extend(function PlaylistsView() {
   View.call(this); // super();
 
-  this.list = document.querySelector('gaia-fast-list');
   this.search = document.getElementById('search');
+  this.list = document.getElementById('list');
 
   this.search.addEventListener('open', () => window.parent.onSearchOpen());
   this.search.addEventListener('close', () => window.parent.onSearchClose());
@@ -18,6 +18,8 @@ var PlaylistsView = View.extend(function PlaylistsView() {
     }
   });
 
+  View.preserveListScrollPosition(this.list);
+
   this.client = threads.client('music-service', window.parent);
   this.client.on('databaseChange', () => this.update());
   this.update();
@@ -25,8 +27,8 @@ var PlaylistsView = View.extend(function PlaylistsView() {
 
 PlaylistsView.prototype.update = function() {
   this.getPlaylists().then((playlists) => {
-    debug('got playlists', playlists);
-    this.list.model = playlists;
+    this.playlists = playlists;
+    this.render();
   });
 };
 
@@ -36,14 +38,14 @@ PlaylistsView.prototype.update = function() {
 
 PlaylistsView.prototype.title = 'Playlists';
 
+PlaylistsView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+
+  this.list.model = this.playlists;
+};
+
 PlaylistsView.prototype.getPlaylists = function() {
-  console.time('get playlists');
-  return fetch('/api/playlists')
-    .then(response => response.json())
-    .then(playlists => {
-      console.timeEnd('get playlists');
-      return playlists;
-    });
+  return fetch('/api/playlists').then(response => response.json());
 };
 
 window.view = new PlaylistsView();

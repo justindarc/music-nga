@@ -128,14 +128,23 @@ proto.createdCallback = function() {
   });
 
   this.els.input.addEventListener('focus', () => this.open());
+  this.els.input.addEventListener('input', debounce(() => {
+    if (typeof this.onsearch !== 'function') {
+      return;
+    }
+
+
+  }, 500));
 
   this.scrollOutOfView();
 };
 
 proto.scrollOutOfView = function() {
-  if (this.nextElementSibling) {
-    this.nextElementSibling.scrollIntoView();
-  }
+  // window.requestAnimationFrame(() => {
+  //   if (this.nextElementSibling) {
+  //     this.nextElementSibling.scrollIntoView();
+  //   }
+  // });
 };
 
 proto.clear = function() {
@@ -159,11 +168,22 @@ proto.close = function() {
     this.els.results.classList.remove('active');
     document.body.style.overflow = 'auto';
 
-    window.requestAnimationFrame(() => this.scrollOutOfView());
+    this.scrollOutOfView();
   });
 
   this.dispatchEvent(new CustomEvent('close'));
 };
+
+proto.onsearch = null;
+
+function debounce(fn, ms) {
+  var timeout;
+  return () => {
+    var args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
 
 try {
   window.MusicSearch = document.registerElement('music-search', { prototype: proto });

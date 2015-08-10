@@ -1,3 +1,7 @@
+/* global threads, View */
+
+var debug = 1 ? (...args) => console.log('[PlaylistDetailView]', ...args) : () => {};
+
 var PlaylistDetailView = View.extend(function PlaylistDetailView() {
   View.call(this); // super();
 
@@ -23,10 +27,6 @@ PlaylistDetailView.prototype.update = function() {
 
 PlaylistDetailView.prototype.title = 'Playlists';
 
-PlaylistDetailView.prototype.getPlaylist = function() {
-  return fetch('/api/playlists/' + this.params.id).then(response => response.json());
-};
-
 PlaylistDetailView.prototype.render = function() {
   View.prototype.render.call(this); // super();
 
@@ -44,6 +44,10 @@ PlaylistDetailView.prototype.render = function() {
   });
 
   this.content.innerHTML = html;
+};
+
+PlaylistDetailView.prototype.getPlaylist = function() {
+  return fetch('/api/playlists/' + this.params.id).then(response => response.json());
 };
 
 window.view = new PlaylistDetailView();

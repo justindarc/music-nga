@@ -1,9 +1,12 @@
-/*global threads,View*/
+/* global threads, View */
+
+var debug = 1 ? (...args) => console.log('[ArtistDetailView]', ...args) : () => {};
 
 var ArtistDetailView = View.extend(function ArtistDetailView() {
   View.call(this); // super();
 
-  this.list = document.querySelector('gaia-fast-list');
+  this.list = document.getElementById('list');
+
   this.list.configure({
 
     // We won't need this after <gaia-fast-list>
@@ -34,6 +37,8 @@ var ArtistDetailView = View.extend(function ArtistDetailView() {
     }
   });
 
+  View.preserveListScrollPosition(this.list);
+
   this.client = threads.client('music-service', window.parent);
   this.client.on('databaseChange', () => this.update());
 
@@ -42,7 +47,8 @@ var ArtistDetailView = View.extend(function ArtistDetailView() {
 
 ArtistDetailView.prototype.update = function() {
   this.getArtist().then((songs) => {
-    this.list.model = songs;
+    this.songs = songs;
+    this.render();
   });
 };
 
@@ -51,6 +57,12 @@ ArtistDetailView.prototype.update = function() {
 // };
 
 ArtistDetailView.prototype.title = 'Artists';
+
+ArtistDetailView.prototype.render = function() {
+  View.prototype.render.call(this); // super();
+
+  this.list.model = this.songs;
+};
 
 ArtistDetailView.prototype.getArtist = function() {
   return fetch('/api/artists/info' + this.params.id).then(response => response.json());
