@@ -1,23 +1,40 @@
+/*global View, threads*/
+
+var debug = 1 ? (...args) => console.log('[AlbumsView]', ...args) : ()=>{};
+
 var AlbumsView = View.extend(function AlbumsView() {
   View.call(this); // super();
 
-  this.content = document.getElementById('content');
   this.search = document.getElementById('search');
+  this.list = document.querySelector('gaia-fast-list');
 
   this.search.addEventListener('open', () => window.parent.onSearchOpen());
   this.search.addEventListener('close', () => window.parent.onSearchClose());
 
-  this.client = threads.client('music-service', window.parent);
+  this.list.configure({
+    model: [],
+    getSectionName(item) {
+      var album = item.metadata.album;
+      return album ? album[0].toUpperCase() : '?';
+    },
 
+    itemKeys: {
+      link: data => `/album-detail?id=${data.name}`,
+      title: 'metadata.album'
+    }
+  });
+
+  this.client = threads.client('music-service', window.parent);
   this.client.on('databaseChange', () => this.update());
 
   this.update();
+  debug('initialized');
 });
 
 AlbumsView.prototype.update = function() {
-  this.getAlbums().then((albums) => {
-    this.albums = albums;
-    this.render();
+  this.getAlbums().then(albums => {
+    debug('got albums', albums);
+    this.list.model = albums;
   });
 };
 
@@ -28,26 +45,17 @@ AlbumsView.prototype.update = function() {
 AlbumsView.prototype.title = 'Albums';
 
 AlbumsView.prototype.getAlbums = function() {
-  return fetch('/api/albums').then(response => response.json());
+  return fetch('/api/albums')
+    .then(response => response.json())
+    .then(albums => clean(albums));
 };
 
-AlbumsView.prototype.render = function() {
-  View.prototype.render.call(this); // super();
-
-  var html = '';
-
-  this.albums.forEach((album) => {
-    var template =
-`<a is="music-list-item"
-    href="/album-detail?id=${album.name}"
-    title="${album.metadata.album}"
-    thumbnail="/api/artwork/thumbnail${album.name}">
-</a>`;
-
-    html += template;
+function clean(items) {
+  debug('clean', items);
+  return items.map(item => {
+    if (!item.metadata.album) item.metadata.album = '?';
+    return item;
   });
-
-  this.content.innerHTML = html;
-};
+}
 
 window.view = new AlbumsView();

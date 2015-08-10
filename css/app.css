@@ -3,7 +3,7 @@
 }
 
 html {
-  background-color: #0E1214;
+  background: var(--background);
   color: #fff;
   font-size: 10px;
   font-family: 'FiraSans';
