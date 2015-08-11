@@ -14,7 +14,7 @@ Running a local web server for development:
   + `npm install -g nws`
 - From this repo's root directory, run `nws` (automatically serves up this app from HTTP port 3030)
 
-To run on Firefox desktop (Developer Edition or Nightly):
+To run on Firefox desktop (Developer Edition *RECOMMENDED*):
 - Check "Enable multi-process Firefox" in `about:preferences` > "General"
 - Set `dom.webcomponents.enabled` to `true` in `about:config`
 - Copy some music files into `./media` and update the DeviceStorage shim to reflect the names of the files you copied
@@ -23,5 +23,6 @@ To run on Firefox desktop (Developer Edition or Nightly):
 
 If you encounter any problems (e.g. HTTP 404 errors, crashes, etc.), try running Firefox with a fresh profile:
 - [Use the Profile Manager to create and remove Firefox profiles](https://support.mozilla.org/en-US/kb/profile-manager-create-and-remove-firefox-profiles)
+- Try Firefox Developer Edition instead of Nightly for improved stability between builds
 
 Note: You may occassionally need to clear your history to flush out the cache or go to `about:serviceworkers` to "Unregister" the Service Worker.
