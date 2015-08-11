@@ -25,7 +25,9 @@ var ArtistsView = View.extend(function ArtistsView() {
   View.preserveListScrollPosition(this.list);
 
   this.client = threads.client('music-service', window.parent);
+
   this.client.on('databaseChange', () => this.update());
+
   this.update();
 });
 

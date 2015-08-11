@@ -86,7 +86,7 @@ var template =
     <button type="button" id="close">close</button>
   </form>
   <section id="results">
-
+    <gaia-fast-list id="list"></gaia-fast-list>
   </section>
 </div>`;
 
@@ -112,8 +112,13 @@ proto.createdCallback = function() {
     input:     $id('input'),
     clear:     $id('clear'),
     close:     $id('close'),
-    results:   $id('results')
+    results:   $id('results'),
+    list:      $id('list')
   };
+
+  // this.els.list.configure({
+
+  // });
 
   this.els.container.addEventListener('click', (evt) => {
     var button = evt.target.closest('button');
@@ -129,22 +134,20 @@ proto.createdCallback = function() {
 
   this.els.input.addEventListener('focus', () => this.open());
   this.els.input.addEventListener('input', debounce(() => {
-    if (typeof this.onsearch !== 'function') {
-      return;
-    }
-
-
+    this.dispatchEvent(new CustomEvent('search', {
+      detail: this.els.input.value
+    }));
   }, 500));
 
   this.scrollOutOfView();
 };
 
 proto.scrollOutOfView = function() {
-  // window.requestAnimationFrame(() => {
-  //   if (this.nextElementSibling) {
-  //     this.nextElementSibling.scrollIntoView();
-  //   }
-  // });
+  window.requestAnimationFrame(() => {
+    if (this.nextElementSibling) {
+      this.nextElementSibling.scrollIntoView();
+    }
+  });
 };
 
 proto.clear = function() {
@@ -174,7 +177,9 @@ proto.close = function() {
   this.dispatchEvent(new CustomEvent('close'));
 };
 
-proto.onsearch = null;
+proto.setResults = function(results) {
+  this.els.list.model = results;
+};
 
 function debounce(fn, ms) {
   var timeout;
