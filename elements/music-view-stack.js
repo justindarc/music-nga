@@ -54,6 +54,21 @@ var template =
   #container > iframe.pop.out.transition {
     transform: translate(100%, 0);
   }
+  #container > iframe.fade {
+    transition: opacity 0.2s linear;
+  }
+  #container > iframe.fade.in {
+    opacity: 0;
+  }
+  #container > iframe.fade.in.transition {
+    opacity: 1;
+  }
+  #container > iframe.fade.out {
+    opacity: 1;
+  }
+  #container > iframe.fade.out.transition {
+    opacity: 0;
+  }
 </style>
 <div id="container">
 </div>`;
@@ -71,6 +86,7 @@ proto.createdCallback = function() {
       this.container.removeChild(evt.target);
     }
 
+    classList.remove('fade');
     classList.remove('push');
     classList.remove('pop');
     classList.remove('in');
@@ -99,11 +115,18 @@ proto.setRootView = function(view, params) {
 
   this.states = [state];
 
+  this.activeState = state;
+
+  view.classList.add('active');
+  view.classList.add('fade');
+  view.classList.add('in');
+
   this.container.innerHTML = '';
   this.container.appendChild(view);
 
-  view.classList.add('active');
-  this.activeState = state;
+  window.requestAnimationFrame(() => {
+    view.classList.add('transition');
+  });
 
   this.dispatchEvent(new CustomEvent('root', { detail: state }));
   this.dispatchEvent(new CustomEvent('change', { detail: state }));

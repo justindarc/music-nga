@@ -17,10 +17,6 @@ body {
   height: 100%;
 }
 
-music-search + gaia-fast-list {
-  height: calc(100% - 3.7rem) !important;
-}
-
 music-artwork {
   display: block;
   width: 100%;
@@ -29,6 +25,13 @@ music-artwork {
 
 a[is="music-list-item"] {
   text-decoration: none;
+}
+
+#tiles {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
 }
 
 .tile {

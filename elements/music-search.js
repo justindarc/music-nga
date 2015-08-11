@@ -78,6 +78,18 @@ var template =
     visibility: visible;
     transition-delay: 0s, 0s;
   }
+  #scroller {
+    display: none;
+    position: absolute;
+    top: 3.7rem;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 99999;
+  }
+  #scroller.active {
+    display: block;
+  }
 </style>
 <div id="container">
   <form id="form" role="search">
@@ -88,6 +100,7 @@ var template =
   <section id="results">
     <gaia-fast-list id="list"></gaia-fast-list>
   </section>
+  <section id="scroller"></section>
 </div>`;
 
 proto.createdCallback = function() {
@@ -113,7 +126,8 @@ proto.createdCallback = function() {
     clear:     $id('clear'),
     close:     $id('close'),
     results:   $id('results'),
-    list:      $id('list')
+    list:      $id('list'),
+    scroller:  $id('scroller')
   };
 
   // this.els.list.configure({
@@ -138,6 +152,21 @@ proto.createdCallback = function() {
       detail: this.els.input.value
     }));
   }, 500));
+
+  window.addEventListener('scroll', (evt) => {
+    var nextElementSibling = this.nextElementSibling;
+    var threshold = nextElementSibling && nextElementSibling.offsetTop;
+    var active = threshold && window.scrollY < threshold;
+    var className = this.els.scroller.className;
+
+    if (active && className === '') {
+      this.els.scroller.className = 'active';
+    }
+
+    else if (!active && className === 'active') {
+      this.els.scroller.className = '';
+    }
+  });
 
   this.scrollOutOfView();
 };
