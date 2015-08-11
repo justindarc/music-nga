@@ -6,7 +6,7 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "componenets"
+    "components"
   ],
   "dependencies": {
     "gaia-icons": "gaia-components/gaia-icons#~0.8.0",
