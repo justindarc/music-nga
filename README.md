@@ -9,6 +9,16 @@ To set up development environment, clone this repo then run:
 
 You may also occassionally need to run `bower update` to fetch the latest dependencies.
 
+To run on Firefox OS device:
+- Ensure "USB Debugging" is set to "ADB+DevTools" in "Settings" > "Developer"
+- Open "WebIDE" in Firefox desktop
+- Select your device from the right-hand "Runtime" menu
+- Select "Open App" from the left-hand menu and choose "Open Packaged App..."
+- Browse to the root folder of this repo
+- Press "Run" to push to the device
+
+Note: Be sure to "Request Higher Permissions" under "Runtime Info" for your device and set `dom.serviceWorkers.enabled` to `true` under "Device Preferences" before running the app.
+
 Running a local web server for development:
 - Install [nws](https://www.npmjs.com/package/nws)
   + `npm install -g nws`
