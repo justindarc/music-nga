@@ -17,6 +17,8 @@ Running a local web server for development:
 To run on Firefox desktop (Developer Edition or Nightly):
 - Check "Enable multi-process Firefox" in `about:preferences` > "General"
 - Set `dom.webcomponents.enabled` to `true` in `about:config`
+- Copy some music files into `./media` and update the DeviceStorage shim to reflect the names of the files you copied
+  + https://github.com/justindarc/music-nga/blob/master/js/shims/device-storage.js#L9
 - Browse to `http://localhost:3030`
 
 If you encounter any problems (e.g. HTTP 404 errors, crashes, etc.), try running Firefox with a fresh profile:
